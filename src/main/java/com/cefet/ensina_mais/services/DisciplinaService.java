@@ -1,0 +1,75 @@
+package com.cefet.ensina_mais.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import com.cefet.ensina_mais.dto.DisciplinaDTO;
+import com.cefet.ensina_mais.entities.Disciplina;
+import com.cefet.ensina_mais.repositories.DisciplinaRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
+@Service
+public class DisciplinaService {
+    
+    @Autowired
+    private DisciplinaRepository disciplinaRepository;
+
+    // Buscar todas
+    public List<DisciplinaDTO> findAll() {
+        List<Disciplina> listaDisciplina = disciplinaRepository.findAll();
+        return listaDisciplina.stream().map(DisciplinaDTO::new).toList();
+    }
+
+    // Buscar por ID
+    public DisciplinaDTO findById(Long id) {
+        Disciplina disciplina = disciplinaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Disciplina não encontrada com ID: " + id));
+        return new DisciplinaDTO(disciplina);
+    }
+
+    // Inserir Disciplina
+    public DisciplinaDTO insert(DisciplinaDTO disciplinaDTO) {
+        // Verifica se o nome não é nulo ou vazio (Campo Obrigatório)
+        if (!StringUtils.hasText(disciplinaDTO.getNome()))
+            throw new IllegalArgumentException("O nome da disciplina não pode ser vazio.");
+
+        // Verifica se já existe uma disciplina com o mesmo nome (Regra de Negócio -> Nome único)
+        if (disciplinaRepository.existsByNome(disciplinaDTO.getNome()))
+            throw new IllegalArgumentException("Já existe uma disciplina com o nome: " + disciplinaDTO.getNome());
+
+        Disciplina disciplina = new Disciplina();
+        disciplina.setNome(disciplinaDTO.getNome());
+        disciplina = disciplinaRepository.save(disciplina);
+        return new DisciplinaDTO(disciplina);
+    }
+
+    // Atualizar Disciplina
+    public DisciplinaDTO update(Long id, DisciplinaDTO disciplinaDTO) {
+        Disciplina disciplina = disciplinaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Disciplina não encontrada com ID: " + id));
+        
+        // Verifica se já existe uma disciplina com o mesmo nome (Regra de Negócio -> Nome único)
+        if (disciplinaRepository.existsByNome(disciplinaDTO.getNome()))
+            throw new IllegalArgumentException("Já existe uma disciplina com o nome: " + disciplinaDTO.getNome());
+        
+        // Se o DTO tiver o campo nome, altera a disciplina
+        if (StringUtils.hasText(disciplinaDTO.getNome()))
+            disciplina.setNome(disciplinaDTO.getNome());
+        
+        disciplina = disciplinaRepository.save(disciplina);
+        return new DisciplinaDTO(disciplina);
+    }
+
+    // Deletar Disciplina
+    public void delete(Long id) {
+        if (!disciplinaRepository.existsById(id)) {
+            throw new EntityNotFoundException("Disciplina não encontrada com ID: " + id);
+        }
+        disciplinaRepository.deleteById(id);
+    }
+
+}
