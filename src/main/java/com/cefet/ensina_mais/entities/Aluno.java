@@ -1,16 +1,11 @@
 package com.cefet.ensina_mais.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.sql.Date;
 
 @Entity
-@Table(name = "tb_pessoa")
-public class Pessoa {
-    
+@Table(name = "tb_aluno")
+public class Aluno {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,17 +16,20 @@ public class Pessoa {
     @Column(nullable = false, unique = true)
     private String cpf;
 
-    @Column(nullable = true, unique = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    public Pessoa(Long id, String nome, String cpf, String email) {
+    @Column(nullable = false)
+    private Date dataNascimento;
+
+    public Aluno() {}
+
+    public Aluno(Long id, String nome, String cpf, String email, Date dataNascimento) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
-    }
-
-    public Pessoa() {
+        this.dataNascimento = dataNascimento;
     }
 
     public Long getId() {
@@ -66,6 +64,14 @@ public class Pessoa {
         this.email = email;
     }
 
+    public Date getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -82,7 +88,7 @@ public class Pessoa {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Pessoa other = (Pessoa) obj;
+        Aluno other = (Aluno) obj;
         if (id == null) {
             if (other.id != null)
                 return false;

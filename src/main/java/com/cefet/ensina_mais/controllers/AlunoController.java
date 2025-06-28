@@ -13,44 +13,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cefet.ensina_mais.dto.PessoaDTO;
-import com.cefet.ensina_mais.services.PessoaService;
+import com.cefet.ensina_mais.dto.AlunoDTO;
+import com.cefet.ensina_mais.services.AlunoService;
 
 @RestController
-@RequestMapping("/pessoas")
-public class PessoaController {
-
+@RequestMapping("/alunos")
+public class AlunoController {
     @Autowired
-    private PessoaService pessoaService;
+    private AlunoService alunoService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<PessoaDTO> findById(@PathVariable Long id) {
-        PessoaDTO pessoaDTO = pessoaService.findById(id);
-        return ResponseEntity.ok(pessoaDTO);
+    public ResponseEntity<AlunoDTO> findById(@PathVariable Long id) {
+        AlunoDTO alunoDTO = alunoService.findById(id);
+        return ResponseEntity.ok(alunoDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<PessoaDTO>> findAll() {
-        List<PessoaDTO> pessoaDTOs = pessoaService.findAll();
-        return ResponseEntity.ok(pessoaDTOs);
+    public ResponseEntity<List<AlunoDTO>> findAll() {
+        List<AlunoDTO> alunoDTOs = alunoService.findAll();
+        return ResponseEntity.ok(alunoDTOs);
     }
 
     @PostMapping
-    public ResponseEntity<PessoaDTO> create(@RequestBody PessoaDTO pessoaDTO) {
-        PessoaDTO novaPessoa = pessoaService.insert(pessoaDTO);
+    public ResponseEntity<AlunoDTO> create(@RequestBody AlunoDTO alunoDTO) {
+        AlunoDTO novaPessoa = alunoService.insert(alunoDTO);
         return ResponseEntity.status(201).body(novaPessoa);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PessoaDTO> update(@PathVariable Long id, @RequestBody PessoaDTO pessoaDTO) {
-        PessoaDTO pessoaAtualizada = pessoaService.update(id, pessoaDTO);
+    public ResponseEntity<AlunoDTO> update(@PathVariable Long id, @RequestBody AlunoDTO alunoDTO) {
+        AlunoDTO pessoaAtualizada = alunoService.update(id, alunoDTO);
         return ResponseEntity.ok(pessoaAtualizada);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        pessoaService.delete(id);
+        alunoService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
 }
