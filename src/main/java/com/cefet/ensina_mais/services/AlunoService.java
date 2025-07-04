@@ -26,7 +26,7 @@ public class AlunoService {
     // Buscar por ID
     public AlunoDTO findById(Long id) {
         Aluno aluno = alunoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrada com ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com ID: " + id));
         return new AlunoDTO(aluno);
     }
 
@@ -41,7 +41,7 @@ public class AlunoService {
             throw new IllegalArgumentException("O CPF do aluno não pode ser vazio.");
 
         // Verifica se a data não é nulo ou vazia (Campo Obrigatório)
-        if (alunoDTO.getDataNascimento().toString() == null || !StringUtils.hasText(alunoDTO.getDataNascimento().toString()))
+        if (alunoDTO.getDataNascimento() == null || !StringUtils.hasText(alunoDTO.getDataNascimento().toString()))
             throw new IllegalArgumentException("A data de nascimento do aluno não pode ser vazia.");
 
         // Verifica se o cpf já existe (Regra de Negócio -> Cpf único)
@@ -60,7 +60,7 @@ public class AlunoService {
     // Atualizar Aluno
     public AlunoDTO update(Long id, AlunoDTO alunoDTO) {
         Aluno aluno = alunoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrada com ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com ID: " + id));
 
         // Verifica se o DTO tem o campo CPF e se ele é diferente do cpf no banco
         if (StringUtils.hasText(alunoDTO.getCpf()) && !alunoDTO.getCpf().equals(aluno.getCpf()))
@@ -85,7 +85,7 @@ public class AlunoService {
     // Remover por ID
     public void delete(Long id) {
         if (!alunoRepository.existsById(id)) {
-            throw new EntityNotFoundException("Aluno não encontrada com ID: " + id);
+            throw new EntityNotFoundException("Aluno não encontrado com ID: " + id);
         }
         alunoRepository.deleteById(id);
     }

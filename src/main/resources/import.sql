@@ -12,3 +12,8 @@ INSERT INTO tb_professor(nome, cpf, email, titulacao) VALUES ('Euler', '680.718.
 INSERT INTO tb_disciplina(nome) VALUES ('Geometria');
 INSERT INTO tb_disciplina(nome) VALUES ('Álgebra');
 INSERT INTO tb_disciplina(nome) VALUES ('Química');
+
+-- Matrículas
+INSERT INTO tb_matricula(numero, data, aluno_id) VALUES (20250001, '2025-01-12', 1);
+INSERT INTO tb_matricula(numero, data, aluno_id) VALUES (20250002, '2025-01-21', 2);
+INSERT INTO tb_matricula(numero, data, aluno_id) VALUES (20250003, '2025-02-01', 3);
