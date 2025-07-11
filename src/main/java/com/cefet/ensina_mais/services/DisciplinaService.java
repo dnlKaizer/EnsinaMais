@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.DisciplinaDTO;
 import com.cefet.ensina_mais.entities.Disciplina;
-import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.DisciplinaRepository;
 import com.cefet.ensina_mais.repositories.TurmaRepository;
 
@@ -70,14 +70,12 @@ public class DisciplinaService {
     }
 
     // Deletar Disciplina
+    @Transactional
     public void delete(Long id) {
-        Disciplina disciplina = disciplinaRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Disciplina não encontrada com ID: " + id));
-        
-        List<Turma> turmas = turmaRepository.findByDisciplina(disciplina);
-        turmas.forEach(turma -> {
-            turmaRepository.deleteById(turma.getId());
-        });
+        if (!disciplinaRepository.existsById(id)) {
+            throw new EntityNotFoundException("Disciplina não encontrada com ID: " + id);
+        }
+        turmaRepository.deleteByDisciplinaId(id);
         disciplinaRepository.deleteById(id);
     }
 

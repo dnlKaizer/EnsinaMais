@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.AlunoDTO;
 import com.cefet.ensina_mais.entities.Aluno;
-import com.cefet.ensina_mais.entities.Matricula;
 import com.cefet.ensina_mais.repositories.AlunoRepository;
 import com.cefet.ensina_mais.repositories.MatriculaRepository;
 
@@ -88,14 +88,12 @@ public class AlunoService {
     }
 
     // Remover por ID
+    @Transactional
     public void delete(Long id) {
-        Aluno aluno = alunoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com ID: " + id));
-
-        List<Matricula> matriculas = matriculaRepository.findByAluno(aluno);
-        matriculas.forEach(matricula -> {
-            matriculaRepository.deleteById(matricula.getId());
-        });
+        if (!alunoRepository.existsById(id)) {
+            throw new EntityNotFoundException("Aluno não encontrado com ID: " + id);
+        }
+        matriculaRepository.deleteByAlunoId(id);
         alunoRepository.deleteById(id);
     }
 

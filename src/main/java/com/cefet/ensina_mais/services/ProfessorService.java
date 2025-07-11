@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.ProfessorDTO;
 import com.cefet.ensina_mais.entities.Professor;
-import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.ProfessorRepository;
 import com.cefet.ensina_mais.repositories.TurmaRepository;
 
@@ -16,6 +16,7 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ProfessorService {
+
     @Autowired
     private ProfessorRepository professorRepository;
 
@@ -88,14 +89,12 @@ public class ProfessorService {
     }
 
     // Remover por ID
+    @Transactional
     public void delete(Long id) {
-        Professor professor = professorRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado com ID: " + id));
-
-        List<Turma> turmas = turmaRepository.findByProfessor(professor);
-        turmas.forEach(turma -> {
-            turmaRepository.deleteById(turma.getId());
-        });
+        if (!professorRepository.existsById(id)) {
+            throw new EntityNotFoundException("Professor não encontrado com ID: " + id);
+        }
+        turmaRepository.deleteByProfessorId(id);
         professorRepository.deleteById(id);
     }
 }
