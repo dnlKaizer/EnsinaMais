@@ -8,7 +8,9 @@ import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.DisciplinaDTO;
 import com.cefet.ensina_mais.entities.Disciplina;
+import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.DisciplinaRepository;
+import com.cefet.ensina_mais.repositories.TurmaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -17,6 +19,9 @@ public class DisciplinaService {
     
     @Autowired
     private DisciplinaRepository disciplinaRepository;
+
+    @Autowired
+    private TurmaRepository turmaRepository;
 
     // Buscar todas
     public List<DisciplinaDTO> findAll() {
@@ -66,9 +71,13 @@ public class DisciplinaService {
 
     // Deletar Disciplina
     public void delete(Long id) {
-        if (!disciplinaRepository.existsById(id)) {
-            throw new EntityNotFoundException("Disciplina não encontrada com ID: " + id);
-        }
+        Disciplina disciplina = disciplinaRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Disciplina não encontrada com ID: " + id));
+        
+        List<Turma> turmas = turmaRepository.findByDisciplina(disciplina);
+        turmas.forEach(turma -> {
+            turmaRepository.deleteById(turma.getId());
+        });
         disciplinaRepository.deleteById(id);
     }
 

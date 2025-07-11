@@ -17,3 +17,8 @@ INSERT INTO tb_disciplina(nome) VALUES ('Química');
 INSERT INTO tb_matricula(numero, data, aluno_id) VALUES (20250001, '2025-01-12', 1);
 INSERT INTO tb_matricula(numero, data, aluno_id) VALUES (20250002, '2025-01-21', 2);
 INSERT INTO tb_matricula(numero, data, aluno_id) VALUES (20250003, '2025-02-01', 3);
+
+-- Turmas
+INSERT INTO tb_turma(semestre, vagas, professor_id, disciplina_id) VALUES ('2025.1', 40, 1, 1);
+INSERT INTO tb_turma(semestre, vagas, professor_id, disciplina_id) VALUES ('2025.1', 60, 2, 2);
+INSERT INTO tb_turma(semestre, vagas, professor_id, disciplina_id) VALUES ('2025.1', 25, 3, 3);

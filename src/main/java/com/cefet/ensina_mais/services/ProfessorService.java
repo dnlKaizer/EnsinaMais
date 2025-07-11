@@ -8,7 +8,9 @@ import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.ProfessorDTO;
 import com.cefet.ensina_mais.entities.Professor;
+import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.ProfessorRepository;
+import com.cefet.ensina_mais.repositories.TurmaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -16,6 +18,9 @@ import jakarta.persistence.EntityNotFoundException;
 public class ProfessorService {
     @Autowired
     private ProfessorRepository professorRepository;
+
+    @Autowired
+    private TurmaRepository turmaRepository;
 
     // Buscar todos
     public List<ProfessorDTO> findAll() {
@@ -84,9 +89,13 @@ public class ProfessorService {
 
     // Remover por ID
     public void delete(Long id) {
-        if (!professorRepository.existsById(id)) {
-            throw new EntityNotFoundException("Professor não encontrado com ID: " + id);
-        }
+        Professor professor = professorRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado com ID: " + id));
+
+        List<Turma> turmas = turmaRepository.findByProfessor(professor);
+        turmas.forEach(turma -> {
+            turmaRepository.deleteById(turma.getId());
+        });
         professorRepository.deleteById(id);
     }
 }
