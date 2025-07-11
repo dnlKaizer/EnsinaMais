@@ -23,7 +23,8 @@ public class MatriculaService {
     @Autowired
     private MatriculaRepository matriculaRepository;
 
-    @Autowired AlunoRepository alunoRepository;
+    @Autowired 
+    private AlunoRepository alunoRepository;
 
     // Buscar todos
     public List<MatriculaDTO> findAll() {
