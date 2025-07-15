@@ -22,3 +22,8 @@ INSERT INTO tb_matricula(numero, data, aluno_id) VALUES (20250003, '2025-02-01',
 INSERT INTO tb_turma(semestre, vagas, professor_id, disciplina_id) VALUES ('2025.1', 40, 1, 1);
 INSERT INTO tb_turma(semestre, vagas, professor_id, disciplina_id) VALUES ('2025.1', 60, 2, 2);
 INSERT INTO tb_turma(semestre, vagas, professor_id, disciplina_id) VALUES ('2025.1', 25, 3, 3);
+
+-- Avaliações
+INSERT INTO tb_avaliacao(data, descricao, valor, turma_id) VALUES ('2025-01-31', 'Avaliação 1', 30, 1)
+INSERT INTO tb_avaliacao(data, descricao, valor, turma_id) VALUES ('2025-03-10', 'Avaliação 2', 35, 1)
+INSERT INTO tb_avaliacao(data, descricao, valor, turma_id) VALUES ('2025-02-12', 'Avaliação 1', 40, 2)

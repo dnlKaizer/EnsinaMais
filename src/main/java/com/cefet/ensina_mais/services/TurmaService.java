@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.TurmaDTO;
 import com.cefet.ensina_mais.entities.Disciplina;
 import com.cefet.ensina_mais.entities.Professor;
 import com.cefet.ensina_mais.entities.Turma;
+import com.cefet.ensina_mais.repositories.AvaliacaoRepository;
 import com.cefet.ensina_mais.repositories.DisciplinaRepository;
 import com.cefet.ensina_mais.repositories.ProfessorRepository;
 import com.cefet.ensina_mais.repositories.TurmaRepository;
@@ -25,7 +27,11 @@ public class TurmaService {
     @Autowired
     private ProfessorRepository professorRepository;
 
-    @Autowired DisciplinaRepository disciplinaRepository;
+    @Autowired 
+    private DisciplinaRepository disciplinaRepository;
+
+    @Autowired
+    private AvaliacaoRepository avaliacaoRepository;
 
     // Buscar todos
     public List<TurmaDTO> findAll() {
@@ -106,10 +112,12 @@ public class TurmaService {
     }
 
     // Remover por ID
+    @Transactional
     public void delete(Long id) {
         if (!turmaRepository.existsById(id)) {
             throw new EntityNotFoundException("Turma não encontrado com ID: " + id);
         }
+        avaliacaoRepository.deleteByTurmaId(id);
         turmaRepository.deleteById(id);
     }
 }
