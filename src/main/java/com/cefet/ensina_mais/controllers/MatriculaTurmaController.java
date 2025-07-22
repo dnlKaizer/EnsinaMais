@@ -22,7 +22,7 @@ public class MatriculaTurmaController {
     @Autowired
     private MatriculaTurmaService matriculaTurmaService;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<MatriculaTurmaDTO> findById(@PathVariable Long id) {
         MatriculaTurmaDTO matriculaTurmaDTO = matriculaTurmaService.findById(id);
         return ResponseEntity.ok(matriculaTurmaDTO);
