@@ -12,6 +12,7 @@ import com.cefet.ensina_mais.entities.SituacaoMatricula;
 import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.MatriculaRepository;
 import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
+import com.cefet.ensina_mais.repositories.NotaRepository;
 import com.cefet.ensina_mais.repositories.TurmaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +29,9 @@ public class MatriculaTurmaService {
 
     @Autowired
     private TurmaRepository turmaRepository;
+
+    @Autowired
+    private NotaRepository notaRepository;
 
     // Buscar todos
     public List<MatriculaTurmaDTO> findAll() {
@@ -113,6 +117,8 @@ public class MatriculaTurmaService {
         if (!matriculaTurmaRepository.existsById(id)) {
             throw new EntityNotFoundException("Matrícula na turma não encontrada com ID: " + id);
         }
+
+        notaRepository.deleteByMatriculaTurmaId(id);
         matriculaTurmaRepository.deleteById(id);
     }
 }

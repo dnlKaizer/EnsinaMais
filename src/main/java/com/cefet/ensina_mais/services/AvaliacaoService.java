@@ -8,6 +8,7 @@ import com.cefet.ensina_mais.dto.AvaliacaoDTO;
 import com.cefet.ensina_mais.entities.Avaliacao;
 import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.AvaliacaoRepository;
+import com.cefet.ensina_mais.repositories.NotaRepository;
 import com.cefet.ensina_mais.repositories.TurmaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -19,6 +20,9 @@ public class AvaliacaoService {
 
     @Autowired
     private TurmaRepository turmaRepository;
+
+    @Autowired
+    private NotaRepository notaRepository;
 
     public List<AvaliacaoDTO> findAll() {
         List<Avaliacao> lista = avaliacaoRepository.findAll();
@@ -80,6 +84,7 @@ public class AvaliacaoService {
         if (!avaliacaoRepository.existsById(id))
             throw new EntityNotFoundException("Avaliação não encontrada com ID: " + id);
 
+        notaRepository.deleteByAvaliacaoId(id);
         avaliacaoRepository.deleteById(id);
     }
 }
