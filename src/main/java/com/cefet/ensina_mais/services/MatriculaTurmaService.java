@@ -89,6 +89,9 @@ public class MatriculaTurmaService {
 
         // Atualiza a nota final
         if (matriculaTurmaDTO.getNotaFinal() != null) {
+            if (matriculaTurmaDTO.getNotaFinal() < 0 || matriculaTurmaDTO.getNotaFinal() > 100) {
+                throw new IllegalArgumentException("Nota final deve estar no intervalo de 0 a 100.");
+            }
             matriculaTurma.setNotaFinal(matriculaTurmaDTO.getNotaFinal());
         }
 
