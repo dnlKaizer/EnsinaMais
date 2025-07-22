@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.cefet.ensina_mais.dto.MatriculaTurmaDTO;
 import com.cefet.ensina_mais.entities.Matricula;
 import com.cefet.ensina_mais.entities.MatriculaTurma;
+import com.cefet.ensina_mais.entities.SituacaoMatricula;
 import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.MatriculaRepository;
 import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
@@ -43,9 +44,15 @@ public class MatriculaTurmaService {
 
     // Inserir matrícula na turma
     public MatriculaTurmaDTO insert(MatriculaTurmaDTO matriculaTurmaDTO) {
-        // Verifica se a situação é null ou diferente de 0, 1 ou 2 (Campo Obrigatório)
-        if (matriculaTurmaDTO.getSituacao() == null || 
-            !(matriculaTurmaDTO.getSituacao() == 0 || matriculaTurmaDTO.getSituacao() == 1 || matriculaTurmaDTO.getSituacao() == 2)) {
+        // Verifica se a situação é válida (Campo Obrigatório)
+        if (matriculaTurmaDTO.getSituacao() == null) {
+            throw new IllegalArgumentException("Situação é obrigatória.");
+        }
+
+        SituacaoMatricula situacao;
+        try {
+            situacao = SituacaoMatricula.fromCodigo(matriculaTurmaDTO.getSituacao());
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Situação inválida. Deve ser 0 (Reprovado), 1 (Aprovado) ou 2 (Em Andamento).");
         }
 
@@ -64,7 +71,7 @@ public class MatriculaTurmaService {
             .orElseThrow(() -> new EntityNotFoundException("Turma não encontrada com ID: " + matriculaTurmaDTO.getIdTurma()));
 
         MatriculaTurma matriculaTurma = new MatriculaTurma();
-        matriculaTurma.setSituacao(matriculaTurmaDTO.getSituacao());
+        matriculaTurma.setSituacao(situacao);
         matriculaTurma.setNotaFinal(matriculaTurmaDTO.getNotaFinal());
         matriculaTurma.setMatricula(matricula);
         matriculaTurma.setTurma(turma);
@@ -80,11 +87,12 @@ public class MatriculaTurmaService {
 
         // Atualiza a situação
         if (matriculaTurmaDTO.getSituacao() != null) {
-            int situacao = matriculaTurmaDTO.getSituacao();
-            if (situacao < 0 || situacao > 2) {
-                throw new IllegalArgumentException("Situação inválida. Os valores permitidos são 0, 1 ou 2.");
+            try {
+                SituacaoMatricula situacao = SituacaoMatricula.fromCodigo(matriculaTurmaDTO.getSituacao());
+                matriculaTurma.setSituacao(situacao);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Situação inválida. Os valores permitidos são 0 (Reprovado), 1 (Aprovado) ou 2 (Em Andamento).");
             }
-            matriculaTurma.setSituacao(situacao);
         }
 
         // Atualiza a nota final

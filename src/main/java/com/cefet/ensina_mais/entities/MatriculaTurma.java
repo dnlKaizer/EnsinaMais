@@ -10,8 +10,9 @@ public class MatriculaTurma {
     private Long id;
 
     // Aprovado = 1, Reprovado = 0, Em Andamento = 2?
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
-    private Integer situacao;
+    private SituacaoMatricula situacao;
 
     @Column(nullable = false)
     private Double notaFinal;
@@ -27,7 +28,7 @@ public class MatriculaTurma {
     public MatriculaTurma() {
     }
 
-    public MatriculaTurma(Long id, Integer situacao, Double notaFinal, Matricula matricula, Turma turma) {
+    public MatriculaTurma(Long id, SituacaoMatricula situacao, Double notaFinal, Matricula matricula, Turma turma) {
         this.id = id;
         this.situacao = situacao;
         this.notaFinal = notaFinal;
@@ -43,11 +44,11 @@ public class MatriculaTurma {
         this.id = id;
     }
 
-    public Integer getSituacao() {
+    public SituacaoMatricula getSituacao() {
         return situacao;
     }
 
-    public void setSituacao(Integer situacao) {
+    public void setSituacao(SituacaoMatricula situacao) {
         this.situacao = situacao;
     }
 

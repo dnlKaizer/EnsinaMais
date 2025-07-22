@@ -12,7 +12,7 @@ public class MatriculaTurmaDTO {
 
     public MatriculaTurmaDTO(MatriculaTurma matriculaTurma) {
         this.id = matriculaTurma.getId();
-        this.situacao = matriculaTurma.getSituacao();
+        this.situacao = matriculaTurma.getSituacao().getCodigo();
         this.notaFinal = matriculaTurma.getNotaFinal();
         this.idMatricula = matriculaTurma.getMatricula().getId();
         this.idTurma = matriculaTurma.getTurma().getId();
