@@ -32,7 +32,7 @@ public class Turma {
     @JoinColumn(name = "professor_id")
     private Professor professor;
 
-    public Turma(Long id, String semestre, int vagas, Disciplina disciplina, Professor professor) {
+    public Turma(Long id, String semestre, Integer vagas, Disciplina disciplina, Professor professor) {
         this.id = id;
         this.semestre = semestre;
         this.vagas = vagas;
