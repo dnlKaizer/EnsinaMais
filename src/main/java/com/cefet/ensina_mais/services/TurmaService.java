@@ -13,6 +13,7 @@ import com.cefet.ensina_mais.entities.Professor;
 import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.AvaliacaoRepository;
 import com.cefet.ensina_mais.repositories.DisciplinaRepository;
+import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
 import com.cefet.ensina_mais.repositories.ProfessorRepository;
 import com.cefet.ensina_mais.repositories.TurmaRepository;
 
@@ -32,6 +33,9 @@ public class TurmaService {
 
     @Autowired
     private AvaliacaoRepository avaliacaoRepository;
+
+    @Autowired
+    private MatriculaTurmaRepository matriculaTurmaRepository;
 
     // Buscar todos
     public List<TurmaDTO> findAll() {
@@ -117,6 +121,7 @@ public class TurmaService {
         if (!turmaRepository.existsById(id)) {
             throw new EntityNotFoundException("Turma não encontrado com ID: " + id);
         }
+        matriculaTurmaRepository.deleteByTurmaId(id);
         avaliacaoRepository.deleteByTurmaId(id);
         turmaRepository.deleteById(id);
     }
