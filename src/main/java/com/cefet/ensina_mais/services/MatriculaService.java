@@ -12,6 +12,7 @@ import com.cefet.ensina_mais.entities.Aluno;
 import com.cefet.ensina_mais.entities.Matricula;
 import com.cefet.ensina_mais.repositories.AlunoRepository;
 import com.cefet.ensina_mais.repositories.MatriculaRepository;
+import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -25,6 +26,9 @@ public class MatriculaService {
 
     @Autowired 
     private AlunoRepository alunoRepository;
+
+    @Autowired
+    private MatriculaTurmaRepository matriculaTurmaRepository;
 
     // Buscar todos
     public List<MatriculaDTO> findAll() {
@@ -65,6 +69,8 @@ public class MatriculaService {
         if (!matriculaRepository.existsById(id)) {
             throw new EntityNotFoundException("Matrícula não encontrada com ID: " + id);
         }
+
+        matriculaTurmaRepository.deleteByMatriculaId(id);
         matriculaRepository.deleteById(id);
     }
 
