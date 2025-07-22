@@ -22,7 +22,7 @@ public class NotaController {
     @Autowired
     private NotaService notaService;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<NotaDTO> findById(@PathVariable Long id) {
         NotaDTO notaDTO = notaService.findById(id);
         return ResponseEntity.ok(notaDTO);
