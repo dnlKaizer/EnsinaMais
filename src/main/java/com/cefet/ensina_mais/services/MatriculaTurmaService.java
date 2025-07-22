@@ -80,7 +80,11 @@ public class MatriculaTurmaService {
 
         // Atualiza a situação
         if (matriculaTurmaDTO.getSituacao() != null) {
-            matriculaTurma.setSituacao(matriculaTurmaDTO.getSituacao());
+            int situacao = matriculaTurmaDTO.getSituacao();
+            if (situacao < 0 || situacao > 2) {
+                throw new IllegalArgumentException("Situação inválida. Os valores permitidos são 0, 1 ou 2.");
+            }
+            matriculaTurma.setSituacao(situacao);
         }
 
         // Atualiza a nota final
