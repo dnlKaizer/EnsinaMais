@@ -35,7 +35,7 @@ public class MatriculaTurmaController {
     }
 
     @PostMapping
-    public ResponseEntity<MatriculaTurmaDTO> create(@RequestBody MatriculaTurmaDTO matriculaTurmaDTO) {
+    public ResponseEntity<MatriculaTurmaDTO> insert(@RequestBody MatriculaTurmaDTO matriculaTurmaDTO) {
         MatriculaTurmaDTO created = matriculaTurmaService.insert(matriculaTurmaDTO);
         return ResponseEntity.status(201).body(created);
     }

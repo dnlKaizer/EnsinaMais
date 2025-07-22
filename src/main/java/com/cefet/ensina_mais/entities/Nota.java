@@ -3,14 +3,16 @@ package com.cefet.ensina_mais.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tb_nota")
+@Table(name = "tb_nota", 
+    uniqueConstraints = @UniqueConstraint(columnNames = {"matricula_turma_id", "avaliacao_id"}))
 public class Nota {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
+    // Nota pode ser nula, por exemplo, se a avaliação ainda não foi realizada
     private Double nota;
 
     @ManyToOne
@@ -18,7 +20,7 @@ public class Nota {
     private Avaliacao avaliacao;
 
     @ManyToOne
-    @JoinColumn(name = "matriculaTurma_id", nullable = false)
+    @JoinColumn(name = "matricula_turma_id", nullable = false)
     private MatriculaTurma matriculaTurma;
 
     public Nota() {}

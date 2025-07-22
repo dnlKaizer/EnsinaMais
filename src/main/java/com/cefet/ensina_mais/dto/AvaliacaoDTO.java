@@ -7,14 +7,14 @@ public class AvaliacaoDTO {
     private Long id;
     private Date data;
     private String descricao;
-    private Double valor;
+    private Double notaMaxima;
     private Long idTurma;
 
     public AvaliacaoDTO(Avaliacao a) {
         this.id = a.getId();
         this.data = a.getData();
         this.descricao = a.getDescricao();
-        this.valor = a.getValor();
+        this.notaMaxima = a.getNotaMaxima();
         this.idTurma = a.getTurma().getId();
     }
 
@@ -33,8 +33,8 @@ public class AvaliacaoDTO {
         return descricao;
     }
 
-    public Double getValor() {
-        return valor;
+    public Double getNotaMaxima() {
+        return notaMaxima;
     }
 
     public Long getIdTurma() {

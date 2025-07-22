@@ -42,9 +42,6 @@ public class NotaService {
 
     //Inserir nota
     public NotaDTO insert(NotaDTO notaDTO) {
-        // Verifica se a nota é null (Campo Obrigatório)
-        if (notaDTO.getNota() == null)
-            throw new IllegalArgumentException("A nota não pode ser vazia.");
 
         // Verifica se a avaliação existe por ID (Campo Obrigatório)
         Avaliacao avaliacao = avaliacaoRepository.findById(notaDTO.getIdAvaliacao())
@@ -53,6 +50,15 @@ public class NotaService {
         // Verifica se a matrícula na turma existe por ID (Campo Obrigatório)
         MatriculaTurma matriculaTurma = matriculaTurmaRepository.findById(notaDTO.getIdMatriculaTurma())
                 .orElseThrow(() -> new EntityNotFoundException("Matrícula na turma não encontrada com ID: " + notaDTO.getIdMatriculaTurma()));
+
+        // VALIDAÇÃO DE CONSISTÊNCIA: Verifica se a avaliação e matrícula são da mesma turma
+        if (!avaliacao.getTurma().getId().equals(matriculaTurma.getTurma().getId())) {
+            throw new IllegalArgumentException(
+                String.format("Inconsistência detectada: A avaliação pertence à turma %d, mas a matrícula está na turma %d. " +
+                             "Uma nota só pode ser atribuída se a avaliação e a matrícula forem da mesma turma.",
+                             avaliacao.getTurma().getId(), matriculaTurma.getTurma().getId())
+            );
+        }
 
         Nota nota = new Nota();
         nota.setNota(notaDTO.getNota());
@@ -70,21 +76,22 @@ public class NotaService {
 
         //Atualiza a nota
         if (notaDTO.getNota() != null) {
-            nota.setNota(notaDTO.getNota());
+            // Verifica se a nota está dentro do intervalo permitido
+            if (notaDTO.getNota() < 0 || notaDTO.getNota() > nota.getAvaliacao().getNotaMaxima()) {
+                throw new IllegalArgumentException("Nota deve estar entre 0 e " + nota.getAvaliacao().getNotaMaxima() + ".");
+            } else {
+                nota.setNota(notaDTO.getNota());
+            }
         }
 
-        // Atualiza a avaliação
-        if (notaDTO.getIdAvaliacao() != null) {
-            Avaliacao avaliacao = avaliacaoRepository.findById(notaDTO.getIdAvaliacao())
-                    .orElseThrow(() -> new EntityNotFoundException("Avaliação não encontrada com ID: " + notaDTO.getIdAvaliacao()));
-            nota.setAvaliacao(avaliacao);
+        // Verifica se a avaliação é nula ou igual à existente
+        if (notaDTO.getIdAvaliacao() != null && !notaDTO.getIdAvaliacao().equals(nota.getAvaliacao().getId())) {
+            throw new IllegalArgumentException("Não é permitido atualizar a avaliação de uma nota existente.");
         }
 
-        // Atualiza a matrícula na turma
-        if (notaDTO.getIdMatriculaTurma() != null) {
-            MatriculaTurma matriculaTurma = matriculaTurmaRepository.findById(notaDTO.getIdMatriculaTurma())
-                    .orElseThrow(() -> new EntityNotFoundException("Matrícula na turma não encontrada com ID: " + notaDTO.getIdMatriculaTurma()));
-            nota.setMatriculaTurma(matriculaTurma);
+        // Verifica se a MatriculaTurma é nula ou igual à existente
+        if (notaDTO.getIdMatriculaTurma() != null && !notaDTO.getIdMatriculaTurma().equals(nota.getMatriculaTurma().getId())) {
+            throw new IllegalArgumentException("Não é permitido atualizar a matrícula na turma de uma nota existente.");
         }
 
         nota = notaRepository.save(nota);

@@ -3,7 +3,8 @@ package com.cefet.ensina_mais.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tb_matriculaTurma")
+@Table(name = "tb_matricula_turma", 
+    uniqueConstraints = @UniqueConstraint(columnNames = {"matricula_id", "turma_id"}))
 public class MatriculaTurma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +15,7 @@ public class MatriculaTurma {
     @Column(nullable = false)
     private SituacaoMatricula situacao;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double notaFinal;
 
     @ManyToOne

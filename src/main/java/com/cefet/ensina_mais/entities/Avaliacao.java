@@ -26,17 +26,17 @@ public class Avaliacao {
     private String descricao;
 
     @Column(nullable = false)
-    private Double valor;
+    private Double notaMaxima;
 
     @ManyToOne
     @JoinColumn(name = "turma_id")
     private Turma turma;
 
-    public Avaliacao(Long id, Date data, String descricao, Double valor, Turma turma) {
+    public Avaliacao(Long id, Date data, String descricao, Double notaMaxima, Turma turma) {
         this.id = id;
         this.data = data;
         this.descricao = descricao;
-        this.valor = valor;
+        this.notaMaxima = notaMaxima;
         this.turma = turma;
     }
 
@@ -59,12 +59,12 @@ public class Avaliacao {
         this.descricao = descricao;
     }
 
-    public Double getValor() {
-        return valor;
+    public Double getNotaMaxima() {
+        return notaMaxima;
     }
 
-    public void setValor(Double valor) {
-        this.valor = valor;
+    public void setNotaMaxima(Double notaMaxima) {
+        this.notaMaxima = notaMaxima;
     }
 
     public Turma getTurma() {

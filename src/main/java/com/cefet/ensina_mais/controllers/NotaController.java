@@ -35,7 +35,7 @@ public class NotaController {
     }
 
     @PostMapping
-    public ResponseEntity<NotaDTO> create(@RequestBody NotaDTO notaDTO) {
+    public ResponseEntity<NotaDTO> insert(@RequestBody NotaDTO notaDTO) {
         NotaDTO createdNota = notaService.insert(notaDTO);
         return ResponseEntity.status(201).body(createdNota);
     }

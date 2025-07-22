@@ -3,6 +3,7 @@ package com.cefet.ensina_mais.services;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import com.cefet.ensina_mais.dto.AvaliacaoDTO;
 import com.cefet.ensina_mais.entities.Avaliacao;
@@ -42,8 +43,8 @@ public class AvaliacaoService {
         if (!StringUtils.hasText(dto.getDescricao()))
             throw new IllegalArgumentException("A descrição da avaliação não pode ser vazia.");
 
-        if (dto.getValor() == null)
-            throw new IllegalArgumentException("O valor da avaliação não pode ser vazio.");
+        if (dto.getNotaMaxima() == null)
+            throw new IllegalArgumentException("A nota máxima da avaliação não pode ser vazia.");
 
         Turma turma = turmaRepository.findById(dto.getIdTurma())
                 .orElseThrow(() -> new EntityNotFoundException("Turma não encontrada com ID: " + dto.getIdTurma()));
@@ -51,7 +52,7 @@ public class AvaliacaoService {
         Avaliacao avaliacao = new Avaliacao();
         avaliacao.setData(dto.getData());
         avaliacao.setDescricao(dto.getDescricao());
-        avaliacao.setValor(dto.getValor());
+        avaliacao.setNotaMaxima(dto.getNotaMaxima());
         avaliacao.setTurma(turma);
         avaliacao = avaliacaoRepository.save(avaliacao);
         return new AvaliacaoDTO(avaliacao);
@@ -67,8 +68,8 @@ public class AvaliacaoService {
         if (StringUtils.hasText(dto.getDescricao()))
             avaliacao.setDescricao(dto.getDescricao());
 
-        if (dto.getValor() != null)
-            avaliacao.setValor(dto.getValor());
+        if (dto.getNotaMaxima() != null)
+            avaliacao.setNotaMaxima(dto.getNotaMaxima());
 
         if (dto.getIdTurma() != null) {
             Turma turma = turmaRepository.findById(dto.getIdTurma())
@@ -80,6 +81,7 @@ public class AvaliacaoService {
         return new AvaliacaoDTO(avaliacao);
     }
 
+    @Transactional
     public void delete(Long id) {
         if (!avaliacaoRepository.existsById(id))
             throw new EntityNotFoundException("Avaliação não encontrada com ID: " + id);

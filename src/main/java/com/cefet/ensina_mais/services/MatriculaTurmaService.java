@@ -60,12 +60,6 @@ public class MatriculaTurmaService {
             throw new IllegalArgumentException("Situação inválida. Deve ser 0 (Reprovado), 1 (Aprovado) ou 2 (Em Andamento).");
         }
 
-        //Verifica se a nota final é null ou não está entre 0 e 100 (Campo Obrigatório)
-        if (matriculaTurmaDTO.getNotaFinal() == null || 
-            matriculaTurmaDTO.getNotaFinal() < 0 || matriculaTurmaDTO.getNotaFinal() > 100) {
-            throw new IllegalArgumentException("Nota final inválida. Deve estar entre 0 e 100.");
-        }
-
         //Verifica se a matrícula existe por ID (Campo Obrigatório)
         Matricula matricula = matriculaRepository.findById(matriculaTurmaDTO.getIdMatricula())
             .orElseThrow(() -> new EntityNotFoundException("Matrícula não encontrada com ID: " + matriculaTurmaDTO.getIdMatricula()));
@@ -88,6 +82,11 @@ public class MatriculaTurmaService {
         // Verifica se a matrícula na turma existe
         MatriculaTurma matriculaTurma = matriculaTurmaRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Matrícula na turma não encontrada com ID: " + id));
+
+        // Verifica se os IDs de matrícula e turma não foram alterados
+        if (matriculaTurmaDTO.getIdMatricula() != null || matriculaTurmaDTO.getIdTurma() != null) {
+            throw new IllegalArgumentException("ID da matrícula e da turma não podem ser alterados.");
+        }
 
         // Atualiza a situação
         if (matriculaTurmaDTO.getSituacao() != null) {

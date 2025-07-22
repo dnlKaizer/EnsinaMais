@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.MatriculaDTO;
@@ -65,6 +66,7 @@ public class MatriculaService {
     // Atualizar matricula ?
 
     // Remover por ID
+    @Transactional
     public void delete(Long id) {
         if (!matriculaRepository.existsById(id)) {
             throw new EntityNotFoundException("Matrícula não encontrada com ID: " + id);

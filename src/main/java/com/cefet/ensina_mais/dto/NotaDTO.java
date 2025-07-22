@@ -5,14 +5,14 @@ import com.cefet.ensina_mais.entities.Nota;
 public class NotaDTO {
     private Long id;
     private Double nota;
-    private Long avaliacaoId;
-    private Long matriculaTurmaId;
+    private Long idAvaliacao;
+    private Long idMatriculaTurma;
 
     public NotaDTO(Nota nota) {
         this.id = nota.getId();
         this.nota = nota.getNota();
-        this.avaliacaoId = nota.getAvaliacao().getId();
-        this.matriculaTurmaId = nota.getMatriculaTurma().getId();
+        this.idAvaliacao = nota.getAvaliacao().getId();
+        this.idMatriculaTurma = nota.getMatriculaTurma().getId();
     }
 
     public NotaDTO() {}
@@ -26,10 +26,10 @@ public class NotaDTO {
     }
 
     public Long getIdAvaliacao() {
-        return avaliacaoId;
+        return idAvaliacao;
     }
 
     public Long getIdMatriculaTurma() {
-        return matriculaTurmaId;
+        return idMatriculaTurma;
     }
 }
