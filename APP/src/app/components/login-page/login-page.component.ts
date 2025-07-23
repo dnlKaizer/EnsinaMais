@@ -43,8 +43,8 @@ export class LoginPageComponent {
         // Outros dados podem ser obtidos posteriormente via API
       });
 
-      // Redirecionar para a página principal (ajuste conforme sua rota)
-      // this.router.navigate(['/dashboard']); // Descomente quando tiver a rota
+      // Redirecionar para a página home
+      this.router.navigate(['/home']);
       
       console.log('Login realizado com sucesso!', response);
       alert(`Login realizado com sucesso! Bem-vindo, ${this.login}!`);
