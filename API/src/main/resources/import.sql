@@ -24,9 +24,9 @@ INSERT INTO tb_turma(semestre, vagas, professor_id, disciplina_id) VALUES ('2025
 INSERT INTO tb_turma(semestre, vagas, professor_id, disciplina_id) VALUES ('2025.1', 25, 3, 3);
 
 -- Avaliações
-INSERT INTO tb_avaliacao(data, descricao, nota_maxima, turma_id) VALUES ('2025-01-31', 'Avaliação 1', 30, 1)
-INSERT INTO tb_avaliacao(data, descricao, nota_maxima, turma_id) VALUES ('2025-03-10', 'Avaliação 2', 35, 1)
-INSERT INTO tb_avaliacao(data, descricao, nota_maxima, turma_id) VALUES ('2025-02-12', 'Avaliação 1', 40, 2)
+INSERT INTO tb_avaliacao(data, descricao, nota_maxima, turma_id) VALUES ('2025-01-31', 'Avaliação 1', 30, 1);
+INSERT INTO tb_avaliacao(data, descricao, nota_maxima, turma_id) VALUES ('2025-03-10', 'Avaliação 2', 35, 1);
+INSERT INTO tb_avaliacao(data, descricao, nota_maxima, turma_id) VALUES ('2025-02-12', 'Avaliação 1', 40, 2);
 
 -- MatriculaTurma (relaciona matrículas com turmas)
 -- Situação: 0=Reprovado, 1=Aprovado, 2=Em Andamento
@@ -38,4 +38,3 @@ INSERT INTO tb_matricula_turma(situacao, nota_final, matricula_id, turma_id) VAL
 INSERT INTO tb_nota(nota, avaliacao_id, matricula_turma_id) VALUES (25, 1, 1);
 INSERT INTO tb_nota(nota, avaliacao_id, matricula_turma_id) VALUES (20, 2, 1);
 INSERT INTO tb_nota(nota, avaliacao_id, matricula_turma_id) VALUES (15, 3, 2);
-
