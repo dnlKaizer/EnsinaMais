@@ -1,1 +1,34 @@
-/* You can add global styles to this file, and also import other style files */
+/* ===== VARIÁVEIS CSS ===== */
+:root {
+    --color-dark-blue: rgb(0, 81, 255);
+    --color-light-blue: rgb(138, 171, 243);
+    --color-very-light-blue: rgb(187, 207, 252);
+    --background-default: var(--color-very-light-blue);
+}
+
+/* ===== BACKGROUND GLOBAL ===== */
+body {
+    background-color: var(--background-default);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Reset para app-root para garantir que ocupe toda a altura */
+app-root {
+    display: block;
+    min-height: 100vh;
+}
+
+/* ===== CLASSES DE CORES ===== */
+.bg-dark-blue {
+    background-color: var(--color-dark-blue);
+}
+
+.bg-light-blue {
+    background-color: var(--color-light-blue);
+}
+
+.bg-very-light-blue {
+    background-color: var(--color-very-light-blue);
+}
