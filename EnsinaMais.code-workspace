@@ -1,0 +1,16 @@
+{
+    "folders": [
+        {
+            "name": "API (Backend)",
+            "path": "./API"
+        },
+        {
+            "name": "APP (Frontend)",
+            "path": "./APP"
+        }
+    ],
+    "settings": {
+        "java.configuration.workspaceFolders": ["API"],
+        "maven.pomdir.location": "API"
+    }
+}

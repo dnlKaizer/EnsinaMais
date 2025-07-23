@@ -1,0 +1,19 @@
+{
+    "java.project.sourcePaths": [
+        "API/src/main/java"
+    ],
+    "java.project.resourcePaths": [
+        "API/src/main/resources"
+    ],
+    "java.project.outputPath": "API/target/classes",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.workspaceFolders": [
+        "API"
+    ],
+    "maven.pomdir.location": "API",
+    "spring-boot.ls.problem.application-properties.enabled": true,
+    "files.exclude": {
+        "API/target": true,
+        "API/.mvn": true
+    }
+}

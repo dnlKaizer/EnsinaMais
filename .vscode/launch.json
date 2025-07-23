@@ -1,0 +1,10 @@
+{
+    "type": "java",
+    "name": "Spring Boot App",
+    "request": "launch",
+    "mainClass": "com.cefet.ensina_mais.EnsinaMaisApplication",
+    "projectName": "ensina-mais",
+    "args": "",
+    "envFile": "${workspaceFolder}/API/.env",
+    "cwd": "${workspaceFolder}/API"
+}

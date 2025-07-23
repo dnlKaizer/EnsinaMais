@@ -1,0 +1,55 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Spring Boot Run",
+            "type": "shell",
+            "command": "./mvnw",
+            "args": ["spring-boot:run"],
+            "options": {
+                "cwd": "${workspaceFolder}/API"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "Maven Clean",
+            "type": "shell",
+            "command": "./mvnw",
+            "args": ["clean"],
+            "options": {
+                "cwd": "${workspaceFolder}/API"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Maven Compile",
+            "type": "shell",
+            "command": "./mvnw",
+            "args": ["compile"],
+            "options": {
+                "cwd": "${workspaceFolder}/API"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Maven Test",
+            "type": "shell",
+            "command": "./mvnw",
+            "args": ["test"],
+            "options": {
+                "cwd": "${workspaceFolder}/API"
+            },
+            "group": "test"
+        }
+    ]
+}
