@@ -32,3 +32,11 @@ app-root {
 .bg-very-light-blue {
     background-color: var(--color-very-light-blue);
 }
+
+/* Remove a borda preta do botão de logout quando clicado/focado */
+.logout-btn {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent;
+}

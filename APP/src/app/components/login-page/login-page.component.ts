@@ -20,7 +20,22 @@ export class LoginPageComponent {
   constructor(
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) {
+    // Função executada antes de carregar a página
+    this.inicializarPagina();
+  }
+
+  // Função que executa antes da página carregar
+  private inicializarPagina() {
+    // Verificar se usuário já está logado
+    if (this.authService.isLoggedIn()) {
+      console.log('Usuário já está logado, redirecionando...');
+      this.router.navigate(['/home']);
+      return;
+    }
+    // Limpar dados anteriores
+    this.authService.logout();
+  }
 
   // Função de autenticar Login
   async autenticar() {
@@ -43,12 +58,10 @@ export class LoginPageComponent {
         // Outros dados podem ser obtidos posteriormente via API
       });
 
-      // Redirecionar para a página principal (ajuste conforme sua rota)
-      // this.router.navigate(['/dashboard']); // Descomente quando tiver a rota
+      // Redirecionar para a página home
+      this.router.navigate(['/home']);
       
       console.log('Login realizado com sucesso!', response);
-      alert(`Login realizado com sucesso! Bem-vindo, ${this.login}!`);
-      
     } catch (error: any) {
       console.error('Erro ao fazer login:', error);
       this.errorMessage = 'Erro de conexão. Verifique se a API está rodando.';

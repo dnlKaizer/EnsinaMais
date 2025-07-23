@@ -17,6 +17,16 @@ export interface LoginResponse {
 }
 
 /**
+ * Interface para dados do usuário decodificados do JWT
+ */
+export interface UserData {
+    sub: string;          // Nome de usuário
+    roles: string;        // Roles do usuário (ex: "ROLE_ADMIN")
+    iat: number;          // Issued at (quando foi criado)
+    exp: number;          // Expiration (quando expira)
+}
+
+/**
  * Serviço responsável por gerenciar a autenticação do usuário
  * Inclui login, logout, armazenamento de token e requisições autenticadas
  */
@@ -106,16 +116,6 @@ export class AuthService {
     }
 
     /**
-     * Obtém o header de autorização completo
-     * @returns String no formato "Bearer token" ou null se não houver token
-     */
-    getAuthorizationHeader(): string | null {
-        const token = this.getToken();
-        const tokenType = this.getTokenType() || 'Bearer';
-        return token ? `${tokenType} ${token}` : null;
-    }
-
-    /**
      * Verifica se o usuário está logado (possui token válido)
      * @returns true se estiver logado, false caso contrário
      */
@@ -171,5 +171,72 @@ export class AuthService {
             ...options,
             headers
         });
+    }
+
+    /**
+     * Decodifica o token JWT e retorna os dados do usuário
+     * @returns UserData com as informações do usuário ou null se não houver token válido
+     */
+    private getTokenPayload(): UserData | null {
+        const token = this.getToken();
+        if (!token) {
+            return null;
+        }
+
+        try {
+            // Decodifica a parte do payload do token JWT (base64)
+            const payload = token.split('.')[1];
+            const decodedPayload = atob(payload);
+            return JSON.parse(decodedPayload) as UserData;
+        } catch (error) {
+            console.error('Erro ao decodificar token JWT:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Verifica se o usuário possui uma role específica
+     * @param role A role a ser verificada
+     * @returns true se o usuário possui a role, false caso contrário
+     */
+    private hasRole(role: string): boolean {
+        const userData = this.getTokenPayload();
+        if (!userData || !userData.roles) {
+            return false;
+        }
+        return userData.roles.includes(role);
+    }
+
+    /**
+     * Verifica se o usuário é um administrador
+     * @returns true se o usuário possui role ADMIN, false caso contrário
+     */
+    isAdmin(): boolean {
+        return this.hasRole('ADMIN');
+    }
+
+    /**
+     * Verifica se o usuário é um professor
+     * @returns true se o usuário possui role PROFESSOR, false caso contrário
+     */
+    isProfessor(): boolean {
+        return this.hasRole('PROFESSOR');
+    }
+
+    /**
+     * Verifica se o usuário é um aluno
+     * @returns true se o usuário possui role ALUNO, false caso contrário
+     */
+    isAluno(): boolean {
+        return this.hasRole('ALUNO');
+    }
+
+    /**
+     * Obtém o nome de usuário (subject) do token JWT
+     * @returns Nome de usuário ou null se não houver token
+     */
+    getUsername(): string | null {
+        const userData = this.getTokenPayload();
+        return userData?.sub || null;
     }
 }
