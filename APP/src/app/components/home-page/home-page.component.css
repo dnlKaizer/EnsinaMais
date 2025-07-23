@@ -1,0 +1,16 @@
+/* Remove a borda preta do botão quando clicado/focado */
+.logout-btn {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent;
+}
+
+/* Remove qualquer borda ou outline em todos os estados */
+.logout-btn:focus,
+.logout-btn:active,
+.logout-btn:focus-visible {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
