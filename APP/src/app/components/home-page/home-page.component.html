@@ -4,3 +4,22 @@
         <img src="assets/images/icons/logout-icon.png" alt="Logout Icon" width="28" height="28">
     </button>
 </header>
+
+<div class="container d-flex align-items-center justify-content-center flex-column pt-3">
+    <h1 class="text-center pb-4">Acessos</h1>
+    @if (isAdmin) {
+        <button class="btn btn-primary btn-home px-4 mb-3 w-100" (click)="goToProfessoresPage()">Professores</button>
+    }
+    @if (isAdmin || isProfessor) {
+        <button class="btn btn-primary btn-home px-4 mb-3 w-100" (click)="goToAlunosPage()">Alunos</button>
+        <button class="btn btn-primary btn-home px-4 mb-3 w-100" (click)="goToAvaliacoesPage()">Avaliações</button>
+        <button class="btn btn-primary btn-home px-4 mb-3 w-100" (click)="goToMatriculasPage()">Matrículas</button>
+    }
+    @if (isAdmin || isProfessor || isAluno) {
+        <button class="btn btn-primary btn-home px-4 mb-3 w-100" (click)="goToTurmasPage()">Turmas</button>
+        <button class="btn btn-primary btn-home px-4 mb-3 w-100" (click)="goToDisciplinasPage()">Disciplinas</button>
+        <button class="btn btn-primary btn-home px-4 mb-3 w-100" (click)="goToNotasPage()">Notas</button>
+        <button class="btn btn-primary btn-home px-4 mb-3 w-100" (click)="goToDesempenhoPage()">Desempenho</button>
+    }
+    
+</div>
