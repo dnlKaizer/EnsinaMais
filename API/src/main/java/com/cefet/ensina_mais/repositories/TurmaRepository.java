@@ -8,8 +8,8 @@ import com.cefet.ensina_mais.entities.Turma;
 
 public interface TurmaRepository extends JpaRepository<Turma, Long> {
     
-    public List<Turma> deleteByProfessorId(Long id);
+    public List<Turma> findByProfessorId(Long id);
 
-    public List<Turma> deleteByDisciplinaId(Long id);
+    public List<Turma> findByDisciplinaId(Long id);
 
 }

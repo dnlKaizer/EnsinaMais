@@ -8,5 +8,5 @@ import com.cefet.ensina_mais.entities.Matricula;
 
 public interface MatriculaRepository extends JpaRepository<Matricula, Long> {
     
-    public List<Matricula> deleteByAlunoId(Long id);
+    public List<Matricula> findByAlunoId(Long id);
 }

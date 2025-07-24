@@ -5,6 +5,6 @@ import com.cefet.ensina_mais.entities.Avaliacao;
 
 public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
     
-    public void deleteByTurmaId(Long turmaId);
+    public Avaliacao findByTurmaId(Long turmaId);
     
 }

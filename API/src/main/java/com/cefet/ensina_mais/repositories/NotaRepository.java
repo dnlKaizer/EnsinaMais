@@ -8,7 +8,7 @@ import com.cefet.ensina_mais.entities.Nota;
 
 public interface NotaRepository extends JpaRepository<Nota, Long> {
     
-    public List<Nota> deleteByAvaliacaoId(Long avaliacaoId);
+    public List<Nota> findByAvaliacaoId(Long avaliacaoId);
 
-    public List<Nota> deleteByMatriculaTurmaId(Long matriculaTurmaId);
+    public List<Nota> findByMatriculaTurmaId(Long matriculaTurmaId);
 }
