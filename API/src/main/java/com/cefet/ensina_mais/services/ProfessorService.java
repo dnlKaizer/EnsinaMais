@@ -8,15 +8,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.cefet.ensina_mais.dto.AlunoDTO;
+import com.cefet.ensina_mais.dto.AvaliacaoDTO;
+import com.cefet.ensina_mais.dto.NotaDTO;
 import com.cefet.ensina_mais.dto.ProfessorDTO;
+import com.cefet.ensina_mais.dto.TurmaDTO;
+import com.cefet.ensina_mais.entities.Aluno;
 import com.cefet.ensina_mais.entities.Avaliacao;
+import com.cefet.ensina_mais.entities.Matricula;
 import com.cefet.ensina_mais.entities.MatriculaTurma;
 import com.cefet.ensina_mais.entities.NivelAcesso;
 import com.cefet.ensina_mais.entities.Nota;
 import com.cefet.ensina_mais.entities.Professor;
 import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.entities.Usuario;
+import com.cefet.ensina_mais.repositories.AlunoRepository;
 import com.cefet.ensina_mais.repositories.AvaliacaoRepository;
+import com.cefet.ensina_mais.repositories.MatriculaRepository;
 import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
 import com.cefet.ensina_mais.repositories.NotaRepository;
 import com.cefet.ensina_mais.repositories.ProfessorRepository;
@@ -45,6 +53,12 @@ public class ProfessorService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private AlunoRepository alunoRepository;
+
+    @Autowired
+    private MatriculaRepository matriculaRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -124,6 +138,110 @@ public class ProfessorService {
 
         professor = professorRepository.save(professor);
         return new ProfessorDTO(professor);
+    }
+
+    // Buscar turmas de um professor
+    public List<TurmaDTO> findTurmasByProfessorId(Long professorId) {
+        if (!professorRepository.existsById(professorId)) {
+            throw new EntityNotFoundException("Professor não encontrado com ID: " + professorId);
+        }
+        List<Turma> turmas = turmaRepository.findByProfessorId(professorId);
+        return turmas.stream().map(TurmaDTO::new).toList();
+    }
+
+    // Buscar alunos de um professor (através das turmas e matrículas)
+    public List<AlunoDTO> findAlunosByProfessorId(Long professorId) {
+        if (!professorRepository.existsById(professorId)) {
+            throw new EntityNotFoundException("Professor não encontrado com ID: " + professorId);
+        }
+        
+        List<Turma> turmas = turmaRepository.findByProfessorId(professorId);
+        List<Aluno> alunos = turmas.stream()
+            .flatMap(turma -> matriculaTurmaRepository.findByTurmaId(turma.getId()).stream())
+            .map(matriculaTurma -> matriculaTurma.getMatricula().getAluno())
+            .distinct()
+            .toList();
+        
+        return alunos.stream().map(AlunoDTO::new).toList();
+    }
+
+    // Buscar notas dos alunos de um professor
+    public List<NotaDTO> findNotasByProfessorId(Long professorId) {
+        if (!professorRepository.existsById(professorId)) {
+            throw new EntityNotFoundException("Professor não encontrado com ID: " + professorId);
+        }
+        
+        List<Turma> turmas = turmaRepository.findByProfessorId(professorId);
+        List<Nota> notas = turmas.stream()
+            .flatMap(turma -> matriculaTurmaRepository.findByTurmaId(turma.getId()).stream())
+            .flatMap(matriculaTurma -> notaRepository.findByMatriculaTurmaId(matriculaTurma.getId()).stream())
+            .toList();
+        
+        return notas.stream().map(NotaDTO::new).toList();
+    }
+
+    // Buscar avaliações de um professor
+    public List<AvaliacaoDTO> findAvaliacoesByProfessorId(Long professorId) {
+        if (!professorRepository.existsById(professorId)) {
+            throw new EntityNotFoundException("Professor não encontrado com ID: " + professorId);
+        }
+        
+        List<Turma> turmas = turmaRepository.findByProfessorId(professorId);
+        List<Avaliacao> avaliacoes = turmas.stream()
+            .flatMap(turma -> avaliacaoRepository.findByTurmaId(turma.getId()).stream())
+            .toList();
+        
+        return avaliacoes.stream().map(AvaliacaoDTO::new).toList();
+    }
+
+    // Atualizar nota (só professores podem alterar notas)
+    public NotaDTO updateNota(Long professorId, Long notaId, NotaDTO notaDTO) {
+        if (!professorRepository.existsById(professorId)) {
+            throw new EntityNotFoundException("Professor não encontrado com ID: " + professorId);
+        }
+        
+        Nota nota = notaRepository.findById(notaId)
+            .orElseThrow(() -> new EntityNotFoundException("Nota não encontrada com ID: " + notaId));
+        
+        // Verificar se a nota pertence a uma turma do professor
+        Long turmaId = nota.getMatriculaTurma().getTurma().getId();
+        Turma turma = turmaRepository.findById(turmaId)
+            .orElseThrow(() -> new EntityNotFoundException("Turma não encontrada"));
+        
+        if (!turma.getProfessor().getId().equals(professorId)) {
+            throw new IllegalArgumentException("Professor não tem permissão para alterar esta nota");
+        }
+        
+        if (notaDTO.getNota() != null) {
+            nota.setNota(notaDTO.getNota());
+        }
+        
+        nota = notaRepository.save(nota);
+        return new NotaDTO(nota);
+    }
+
+    // Criar avaliação
+    public AvaliacaoDTO createAvaliacao(Long professorId, AvaliacaoDTO avaliacaoDTO) {
+        if (!professorRepository.existsById(professorId)) {
+            throw new EntityNotFoundException("Professor não encontrado com ID: " + professorId);
+        }
+        
+        // Verificar se a turma pertence ao professor
+        Turma turma = turmaRepository.findById(avaliacaoDTO.getIdTurma())
+            .orElseThrow(() -> new EntityNotFoundException("Turma não encontrada com ID: " + avaliacaoDTO.getIdTurma()));
+        
+        if (!turma.getProfessor().getId().equals(professorId)) {
+            throw new IllegalArgumentException("Professor não tem permissão para criar avaliação nesta turma");
+        }
+        
+        Avaliacao avaliacao = new Avaliacao();
+        avaliacao.setDescricao(avaliacaoDTO.getDescricao());
+        avaliacao.setData(avaliacaoDTO.getData());
+        avaliacao.setNotaMaxima(avaliacaoDTO.getNotaMaxima());
+        avaliacao.setTurma(turma);
+        
+        avaliacao = avaliacaoRepository.save(avaliacao);
+        return new AvaliacaoDTO(avaliacao);
     }
 
     // Remover por ID

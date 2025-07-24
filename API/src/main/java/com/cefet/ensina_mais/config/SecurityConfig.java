@@ -56,6 +56,12 @@ public class SecurityConfig {
                 // Professores
                 .requestMatchers(HttpMethod.GET, "/professores/{id}").hasAnyRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/professores/{usuarioId}").hasAnyRole("ADMIN", "PROFESSOR")
+                .requestMatchers(HttpMethod.GET, "/professores/{id}/turmas").hasAnyRole("ADMIN", "PROFESSOR")
+                .requestMatchers(HttpMethod.GET, "/professores/{id}/alunos").hasAnyRole("ADMIN", "PROFESSOR")
+                .requestMatchers(HttpMethod.GET, "/professores/{id}/notas").hasAnyRole("ADMIN", "PROFESSOR")
+                .requestMatchers(HttpMethod.GET, "/professores/{id}/avaliacoes").hasAnyRole("ADMIN", "PROFESSOR")
+                .requestMatchers(HttpMethod.PUT, "/professores/{professorId}/notas/{notaId}").hasAnyRole("ADMIN", "PROFESSOR")
+                .requestMatchers(HttpMethod.POST, "/professores/{professorId}/avaliacoes").hasAnyRole("ADMIN", "PROFESSOR")
                 .requestMatchers(HttpMethod.POST, "/professores").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/professores/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/professores/**").hasRole("ADMIN")
