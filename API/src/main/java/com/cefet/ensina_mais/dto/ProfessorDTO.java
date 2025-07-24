@@ -9,6 +9,7 @@ public class ProfessorDTO {
     private String cpf;
     private String email;
     private String titulacao;
+    private Long idUsuario;
 
     public ProfessorDTO() {
     }
@@ -19,10 +20,15 @@ public class ProfessorDTO {
         this.cpf = p.getCpf();
         this.email = p.getEmail();
         this.titulacao = p.getTitulacao();
+        this.idUsuario = p.getUsuario().getId();
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Long getIdUsuario() {
+        return idUsuario;
     }
 
     public String getNome() {

@@ -3,6 +3,7 @@ package com.cefet.ensina_mais.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -11,11 +12,14 @@ import com.cefet.ensina_mais.dto.AlunoDTO;
 import com.cefet.ensina_mais.entities.Aluno;
 import com.cefet.ensina_mais.entities.Matricula;
 import com.cefet.ensina_mais.entities.MatriculaTurma;
+import com.cefet.ensina_mais.entities.NivelAcesso;
 import com.cefet.ensina_mais.entities.Nota;
+import com.cefet.ensina_mais.entities.Usuario;
 import com.cefet.ensina_mais.repositories.AlunoRepository;
 import com.cefet.ensina_mais.repositories.MatriculaRepository;
 import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
 import com.cefet.ensina_mais.repositories.NotaRepository;
+import com.cefet.ensina_mais.repositories.UsuarioRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -32,6 +36,12 @@ public class AlunoService {
 
     @Autowired
     private NotaRepository notaRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Buscar todos
     public List<AlunoDTO> findAll() {
@@ -64,11 +74,18 @@ public class AlunoService {
         if (alunoRepository.existsByCpf(alunoDTO.getCpf()))
             throw new IllegalArgumentException("Já existe um aluno com o CPF: " + alunoDTO.getCpf());
 
+        Usuario usuario = new Usuario();
+        usuario.setLogin(alunoDTO.getNome());
+        usuario.setSenha(passwordEncoder.encode(alunoDTO.getNome()));
+        usuario.setNivelAcesso(NivelAcesso.ALUNO);
+        usuario = usuarioRepository.save(usuario);
+
         Aluno aluno = new Aluno();
         aluno.setNome(alunoDTO.getNome());
         aluno.setCpf(alunoDTO.getCpf());
         aluno.setEmail(alunoDTO.getEmail());
         aluno.setDataNascimento(alunoDTO.getDataNascimento());
+        aluno.setUsuario(usuario);
         aluno = alunoRepository.save(aluno);
         return new AlunoDTO(aluno);
     }

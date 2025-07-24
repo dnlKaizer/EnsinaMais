@@ -62,17 +62,41 @@ public class DataLoader implements CommandLineRunner {
         admin.setNivelAcesso(NivelAcesso.ADMIN);
         usuarioRepository.save(admin);
 
+        Usuario usuarioTesla = new Usuario();
+        usuarioTesla.setLogin("tesla");
+        usuarioTesla.setSenha(passwordEncoder.encode("tesla"));
+        usuarioTesla.setNivelAcesso(NivelAcesso.PROFESSOR);
+        usuarioRepository.save(usuarioTesla);
+
         Usuario usuarioEuler = new Usuario();
         usuarioEuler.setLogin("euler");
         usuarioEuler.setSenha(passwordEncoder.encode("euler"));
         usuarioEuler.setNivelAcesso(NivelAcesso.PROFESSOR);
         usuarioRepository.save(usuarioEuler);
 
+        Usuario usuarioEinstein = new Usuario();
+        usuarioEinstein.setLogin("einstein");
+        usuarioEinstein.setSenha(passwordEncoder.encode("einstein"));
+        usuarioEinstein.setNivelAcesso(NivelAcesso.PROFESSOR);
+        usuarioRepository.save(usuarioEinstein);
+
         Usuario usuarioGeraldo = new Usuario();
-        usuarioGeraldo.setLogin("ger");
-        usuarioGeraldo.setSenha(passwordEncoder.encode("ger"));
+        usuarioGeraldo.setLogin("geraldo");
+        usuarioGeraldo.setSenha(passwordEncoder.encode("geraldo"));
         usuarioGeraldo.setNivelAcesso(NivelAcesso.ALUNO);
         usuarioRepository.save(usuarioGeraldo);
+
+        Usuario usuarioManual = new Usuario();
+        usuarioManual.setLogin("manual");
+        usuarioManual.setSenha(passwordEncoder.encode("manual"));
+        usuarioManual.setNivelAcesso(NivelAcesso.ALUNO);
+        usuarioRepository.save(usuarioManual);
+
+        Usuario usuarioRobson = new Usuario();
+        usuarioRobson.setLogin("robson");
+        usuarioRobson.setSenha(passwordEncoder.encode("robson"));
+        usuarioRobson.setNivelAcesso(NivelAcesso.ALUNO);
+        usuarioRepository.save(usuarioRobson);
 
         // 2. Criar Alunos
         Aluno geraldo = new Aluno();
@@ -80,6 +104,7 @@ public class DataLoader implements CommandLineRunner {
         geraldo.setCpf("793.613.590-10");
         geraldo.setEmail("geraldo@gmail.com");
         geraldo.setDataNascimento(Date.valueOf("2008-09-14"));
+        geraldo.setUsuario(usuarioGeraldo);
         alunoRepository.save(geraldo);
 
         Aluno robson = new Aluno();
@@ -87,6 +112,7 @@ public class DataLoader implements CommandLineRunner {
         robson.setCpf("444.852.110-96");
         robson.setEmail("robson@gmail.com");
         robson.setDataNascimento(Date.valueOf("2009-01-12"));
+        robson.setUsuario(usuarioRobson);
         alunoRepository.save(robson);
 
         Aluno manual = new Aluno();
@@ -94,6 +120,7 @@ public class DataLoader implements CommandLineRunner {
         manual.setCpf("935.469.520-57");
         manual.setEmail("manual@gmail.com");
         manual.setDataNascimento(Date.valueOf("2008-12-10"));
+        manual.setUsuario(usuarioManual);
         alunoRepository.save(manual);
 
         // 3. Criar Professores
@@ -102,6 +129,7 @@ public class DataLoader implements CommandLineRunner {
         tesla.setCpf("206.366.250-95");
         tesla.setEmail("tesla@gmail.com");
         tesla.setTitulacao("Mestre");
+        tesla.setUsuario(usuarioTesla);
         professorRepository.save(tesla);
 
         Professor einstein = new Professor();
@@ -109,6 +137,7 @@ public class DataLoader implements CommandLineRunner {
         einstein.setCpf("292.060.350-70");
         einstein.setEmail("einstein@gmail.com");
         einstein.setTitulacao("Doutor");
+        einstein.setUsuario(usuarioEinstein);
         professorRepository.save(einstein);
 
         Professor euler = new Professor();
@@ -116,6 +145,7 @@ public class DataLoader implements CommandLineRunner {
         euler.setCpf("680.718.410-72");
         euler.setEmail("euler@gmail.com");
         euler.setTitulacao("Doutor");
+        euler.setUsuario(usuarioEuler);
         professorRepository.save(euler);
 
         // 4. Criar Disciplinas

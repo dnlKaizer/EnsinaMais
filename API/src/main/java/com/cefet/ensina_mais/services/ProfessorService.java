@@ -3,6 +3,7 @@ package com.cefet.ensina_mais.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -10,14 +11,17 @@ import org.springframework.util.StringUtils;
 import com.cefet.ensina_mais.dto.ProfessorDTO;
 import com.cefet.ensina_mais.entities.Avaliacao;
 import com.cefet.ensina_mais.entities.MatriculaTurma;
+import com.cefet.ensina_mais.entities.NivelAcesso;
 import com.cefet.ensina_mais.entities.Nota;
 import com.cefet.ensina_mais.entities.Professor;
 import com.cefet.ensina_mais.entities.Turma;
+import com.cefet.ensina_mais.entities.Usuario;
 import com.cefet.ensina_mais.repositories.AvaliacaoRepository;
 import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
 import com.cefet.ensina_mais.repositories.NotaRepository;
 import com.cefet.ensina_mais.repositories.ProfessorRepository;
 import com.cefet.ensina_mais.repositories.TurmaRepository;
+import com.cefet.ensina_mais.repositories.UsuarioRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -38,6 +42,12 @@ public class ProfessorService {
 
     @Autowired
     private NotaRepository notaRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Buscar todos
     public List<ProfessorDTO> findAll() {
@@ -69,6 +79,12 @@ public class ProfessorService {
         // Verifica se o cpf já existe (Regra de Negócio -> Cpf único)
         if (professorRepository.existsByCpf(professorDTO.getCpf()))
             throw new IllegalArgumentException("Já existe um professor com o CPF: " + professorDTO.getCpf());
+
+        Usuario usuario = new Usuario();
+        usuario.setLogin(professorDTO.getNome());
+        usuario.setSenha(passwordEncoder.encode(professorDTO.getNome()));
+        usuario.setNivelAcesso(NivelAcesso.PROFESSOR);
+        usuario = usuarioRepository.save(usuario);
 
         Professor professor = new Professor();
         professor.setNome(professorDTO.getNome());

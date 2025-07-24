@@ -22,14 +22,19 @@ public class Aluno {
     @Column(nullable = false)
     private Date dataNascimento;
 
+    @OneToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
     public Aluno() {}
 
-    public Aluno(Long id, String nome, String cpf, String email, Date dataNascimento) {
+    public Aluno(Long id, String nome, String cpf, String email, Date dataNascimento, Usuario usuario) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
         this.dataNascimento = dataNascimento;
+        this.usuario = usuario;
     }
 
     public Long getId() {
@@ -70,6 +75,14 @@ public class Aluno {
 
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override

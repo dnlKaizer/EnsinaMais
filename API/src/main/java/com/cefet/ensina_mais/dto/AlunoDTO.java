@@ -11,6 +11,7 @@ public class AlunoDTO {
     private String cpf;
     private String email;
     private Date dataNascimento;
+    private Long idUsuario;
 
     public AlunoDTO(Aluno p) {
         this.id = p.getId();
@@ -18,6 +19,7 @@ public class AlunoDTO {
         this.cpf = p.getCpf();
         this.email = p.getEmail();
         this.dataNascimento = p.getDataNascimento();
+        this.idUsuario = p.getUsuario().getId();
     }
 
     public AlunoDTO() {
@@ -42,5 +44,9 @@ public class AlunoDTO {
     public Date getDataNascimento() {
         return dataNascimento;
     }
-    
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
 }

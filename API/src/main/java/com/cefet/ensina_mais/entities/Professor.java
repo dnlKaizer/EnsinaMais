@@ -21,14 +21,19 @@ public class Professor {
     @Column(nullable = false)
     private String titulacao;
 
+    @OneToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
     public Professor() {}
 
-    public Professor(Long id, String nome, String cpf, String email, String titulacao) {
+    public Professor(Long id, String nome, String cpf, String email, String titulacao, Usuario usuario) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
         this.titulacao = titulacao;
+        this.usuario = usuario;
     }
 
     public Long getId() {
@@ -69,6 +74,14 @@ public class Professor {
 
     public void setTitulacao(String titulacao) {
         this.titulacao = titulacao;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override
