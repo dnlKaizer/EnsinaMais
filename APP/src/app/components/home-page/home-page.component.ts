@@ -40,7 +40,7 @@ export class HomePageComponent {
   }
 
   goToTurmasPage() {
-    this.router.navigate(['']);
+    this.router.navigate(['/turmas']);
   }
 
   goToDisciplinasPage() {

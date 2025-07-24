@@ -4,6 +4,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 import { ProfessoresPageComponent } from './components/professores-page/professores-page.component';
 import { DisciplinasPageComponent } from './components/disciplinas-page/disciplinas-page.component';
 import { MatriculasPageComponent } from './components/matriculas-page/matriculas-page.component';
+import { TurmasPageComponent } from './components/turmas-page/turmas-page.component';
 
 export const routes: Routes = [
     // Rota padrão - redireciona para login
@@ -24,6 +25,9 @@ export const routes: Routes = [
 
     // Rota para a página matrículas
     { path: 'matriculas', component: MatriculasPageComponent },
+
+    // Rota para a página matrículas
+    { path: 'turmas', component: TurmasPageComponent },
 
     // Rota para páginas não encontradas
     { path: '**', redirectTo: '/login' }

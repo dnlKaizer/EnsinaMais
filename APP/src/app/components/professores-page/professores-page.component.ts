@@ -312,18 +312,4 @@ export class ProfessoresPageComponent {
         return 'Professor';
     }
   }
-
-  /**
-   * Gera as iniciais do nome para o avatar
-   */
-  getInitials(nome: string): string {
-    if (!nome) return 'P';
-    
-    const palavras = nome.trim().split(' ');
-    if (palavras.length === 1) {
-      return palavras[0].charAt(0).toUpperCase();
-    }
-    
-    return (palavras[0].charAt(0) + palavras[palavras.length - 1].charAt(0)).toUpperCase();
-  }
 }
