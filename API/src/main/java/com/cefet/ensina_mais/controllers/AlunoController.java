@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cefet.ensina_mais.dto.AlunoDTO;
+import com.cefet.ensina_mais.dto.AvaliacaoDTO;
+import com.cefet.ensina_mais.dto.DisciplinaDTO;
 import com.cefet.ensina_mais.dto.MatriculaDTO;
 import com.cefet.ensina_mais.dto.MatriculaTurmaDTO;
 import com.cefet.ensina_mais.dto.NotaDTO;
+import com.cefet.ensina_mais.dto.ProfessorDTO;
+import com.cefet.ensina_mais.dto.TurmaDTO;
 import com.cefet.ensina_mais.services.AlunoService;
 
 @RestController
@@ -82,6 +86,34 @@ public class AlunoController {
     public ResponseEntity<List<NotaDTO>> findNotasByMatriculaTurmaId(@PathVariable Long alunoId, @PathVariable Long matriculaTurmaId) {
         List<NotaDTO> notas = alunoService.findNotasByMatriculaTurmaId(matriculaTurmaId);
         return ResponseEntity.ok(notas);
+    }
+
+    // Endpoint para buscar disciplina por matrícula-turma ID
+    @GetMapping("/{alunoId}/matriculas-turmas/{matriculaTurmaId}/disciplina")
+    public ResponseEntity<DisciplinaDTO> findDisciplinaByMatriculaTurmaId(@PathVariable Long alunoId, @PathVariable Long matriculaTurmaId) {
+        DisciplinaDTO disciplina = alunoService.findDisciplinaByMatriculaTurmaId(matriculaTurmaId);
+        return ResponseEntity.ok(disciplina);
+    }
+
+    // Endpoint para buscar professor por matrícula-turma ID
+    @GetMapping("/{alunoId}/matriculas-turmas/{matriculaTurmaId}/professor")
+    public ResponseEntity<ProfessorDTO> findProfessorByMatriculaTurmaId(@PathVariable Long alunoId, @PathVariable Long matriculaTurmaId) {
+        ProfessorDTO professor = alunoService.findProfessorByMatriculaTurmaId(matriculaTurmaId);
+        return ResponseEntity.ok(professor);
+    }
+
+    // Endpoint para buscar avaliações por matrícula-turma ID
+    @GetMapping("/{alunoId}/matriculas-turmas/{matriculaTurmaId}/avaliacoes")
+    public ResponseEntity<List<AvaliacaoDTO>> findAvaliacoesByMatriculaTurmaId(@PathVariable Long alunoId, @PathVariable Long matriculaTurmaId) {
+        List<AvaliacaoDTO> avaliacoes = alunoService.findAvaliacoesByMatriculaTurmaId(matriculaTurmaId);
+        return ResponseEntity.ok(avaliacoes);
+    }
+
+    // Endpoint para buscar turma por matrícula-turma ID
+    @GetMapping("/{alunoId}/matriculas-turmas/{matriculaTurmaId}/turma")
+    public ResponseEntity<TurmaDTO> findTurmaByMatriculaTurmaId(@PathVariable Long alunoId, @PathVariable Long matriculaTurmaId) {
+        TurmaDTO turma = alunoService.findTurmaByMatriculaTurmaId(matriculaTurmaId);
+        return ResponseEntity.ok(turma);
     }
 
     @PostMapping
