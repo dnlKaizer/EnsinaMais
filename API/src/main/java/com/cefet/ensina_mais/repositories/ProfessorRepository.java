@@ -15,4 +15,6 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
 
     // Busca Pessoa por CPF
     public Optional<Professor> findByCpf(String cpf);
+
+    public Optional<Professor> findByUsuarioId(Long usuarioId);
 }

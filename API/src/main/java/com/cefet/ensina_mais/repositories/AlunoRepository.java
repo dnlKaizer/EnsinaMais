@@ -15,4 +15,6 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     // Busca Pessoa por CPF
     public Optional<Aluno> findByCpf(String cpf);
+
+    public Optional<Aluno> findByUsuarioId(Long usuarioId);
 }

@@ -28,6 +28,12 @@ public class AlunoController {
         return ResponseEntity.ok(alunoDTO);
     }
 
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<AlunoDTO> findByUsuarioId(@PathVariable Long usuarioId) {
+        AlunoDTO alunoDTO = alunoService.findByUsuarioId(usuarioId);
+        return ResponseEntity.ok(alunoDTO);
+    }
+
     @GetMapping
     public ResponseEntity<List<AlunoDTO>> findAll() {
         List<AlunoDTO> alunoDTOs = alunoService.findAll();
@@ -35,15 +41,15 @@ public class AlunoController {
     }
 
     @PostMapping
-    public ResponseEntity<AlunoDTO> create(@RequestBody AlunoDTO alunoDTO) {
-        AlunoDTO novaPessoa = alunoService.insert(alunoDTO);
-        return ResponseEntity.status(201).body(novaPessoa);
+    public ResponseEntity<AlunoDTO> insert(@RequestBody AlunoDTO alunoDTO) {
+        AlunoDTO novoAluno = alunoService.insert(alunoDTO);
+        return ResponseEntity.status(201).body(novoAluno);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AlunoDTO> update(@PathVariable Long id, @RequestBody AlunoDTO alunoDTO) {
-        AlunoDTO pessoaAtualizada = alunoService.update(id, alunoDTO);
-        return ResponseEntity.ok(pessoaAtualizada);
+        AlunoDTO alunoAtualizado = alunoService.update(id, alunoDTO);
+        return ResponseEntity.ok(alunoAtualizado);
     }
 
     @DeleteMapping("/{id}")

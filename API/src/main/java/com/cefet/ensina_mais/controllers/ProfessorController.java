@@ -28,6 +28,12 @@ public class ProfessorController {
         return ResponseEntity.ok(professorDTO);
     }
 
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<ProfessorDTO> findByUsuarioId(@PathVariable Long usuarioId) {
+        ProfessorDTO professorDTO = professorService.findByUsuarioId(usuarioId);
+        return ResponseEntity.ok(professorDTO);
+    }
+
     @GetMapping
     public ResponseEntity<List<ProfessorDTO>> findAll() {
         List<ProfessorDTO> professorDTOs = professorService.findAll();

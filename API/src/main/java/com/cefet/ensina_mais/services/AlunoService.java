@@ -56,6 +56,12 @@ public class AlunoService {
         return new AlunoDTO(aluno);
     }
 
+    public AlunoDTO findByUsuarioId(Long usuarioId) {
+        Aluno aluno = alunoRepository.findByUsuarioId(usuarioId)
+                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com ID de usuário: " + usuarioId));
+        return new AlunoDTO(aluno);
+    }
+
     // Inserir Aluno
     public AlunoDTO insert(AlunoDTO alunoDTO) {
         // Verifica se o nome não é nulo ou vazio (Campo Obrigatório)

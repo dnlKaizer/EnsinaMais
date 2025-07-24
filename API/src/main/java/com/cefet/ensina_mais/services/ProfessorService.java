@@ -62,6 +62,12 @@ public class ProfessorService {
         return new ProfessorDTO(professor);
     }
 
+    public ProfessorDTO findByUsuarioId(Long usuarioId) {
+        Professor professor = professorRepository.findByUsuarioId(usuarioId)
+                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado com ID de usuário: " + usuarioId));
+        return new ProfessorDTO(professor);
+    }
+
     // Inserir Professor
     public ProfessorDTO insert(ProfessorDTO professorDTO) {
         // Verifica se o nome não é nulo ou vazio (Campo Obrigatório)
