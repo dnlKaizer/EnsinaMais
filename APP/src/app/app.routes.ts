@@ -23,14 +23,12 @@ export const routes: Routes = [
   // Rota para a página alunos
   { path: 'alunos', component: AlunosPageComponent },
 
+  // Rota para a página disciplinas
+  { path: 'disciplinas', component: DisciplinasPageComponent },
+
+  // Rota para a página matrículas
+  { path: 'matriculas', component: MatriculasPageComponent },
+
   // Rota para páginas não encontradas
   { path: '**', redirectTo: '/login' },
-    // Rota para a página disciplinas
-    { path: 'disciplinas', component: DisciplinasPageComponent },
-
-    // Rota para a página matrículas
-    { path: 'matriculas', component: MatriculasPageComponent },
-
-    // Rota para páginas não encontradas
-    { path: '**', redirectTo: '/login' }
 ];
