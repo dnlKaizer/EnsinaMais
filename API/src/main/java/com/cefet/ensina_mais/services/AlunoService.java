@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.AlunoDTO;
+import com.cefet.ensina_mais.dto.MatriculaDTO;
+import com.cefet.ensina_mais.dto.MatriculaTurmaDTO;
+import com.cefet.ensina_mais.dto.NotaDTO;
 import com.cefet.ensina_mais.entities.Aluno;
 import com.cefet.ensina_mais.entities.Matricula;
 import com.cefet.ensina_mais.entities.MatriculaTurma;
@@ -140,6 +143,59 @@ public class AlunoService {
         }
         
         alunoRepository.deleteById(id);
+    }
+
+    // Buscar matrículas de um aluno
+    public List<MatriculaDTO> findMatriculasByAlunoId(Long alunoId) {
+        if (!alunoRepository.existsById(alunoId)) {
+            throw new EntityNotFoundException("Aluno não encontrado com ID: " + alunoId);
+        }
+        List<Matricula> matriculas = matriculaRepository.findByAlunoId(alunoId);
+        return matriculas.stream().map(MatriculaDTO::new).toList();
+    }
+
+    // Buscar matrículas-turmas de um aluno (através das matrículas)
+    public List<MatriculaTurmaDTO> findMatriculaTurmasByAlunoId(Long alunoId) {
+        if (!alunoRepository.existsById(alunoId)) {
+            throw new EntityNotFoundException("Aluno não encontrado com ID: " + alunoId);
+        }
+        
+        List<Matricula> matriculas = matriculaRepository.findByAlunoId(alunoId);
+        List<MatriculaTurma> matriculaTurmas = matriculas.stream()
+            .flatMap(matricula -> matriculaTurmaRepository.findByMatriculaId(matricula.getId()).stream())
+            .toList();
+        
+        return matriculaTurmas.stream().map(MatriculaTurmaDTO::new).toList();
+    }
+
+    // Buscar notas de um aluno (através das matrículas-turmas)
+    public List<NotaDTO> findNotasByAlunoId(Long alunoId) {
+        if (!alunoRepository.existsById(alunoId)) {
+            throw new EntityNotFoundException("Aluno não encontrado com ID: " + alunoId);
+        }
+        
+        List<Matricula> matriculas = matriculaRepository.findByAlunoId(alunoId);
+        List<MatriculaTurma> matriculaTurmas = matriculas.stream()
+            .flatMap(matricula -> matriculaTurmaRepository.findByMatriculaId(matricula.getId()).stream())
+            .toList();
+        
+        List<Nota> notas = matriculaTurmas.stream()
+            .flatMap(matriculaTurma -> notaRepository.findByMatriculaTurmaId(matriculaTurma.getId()).stream())
+            .toList();
+        
+        return notas.stream().map(NotaDTO::new).toList();
+    }
+
+    // Buscar matrículas-turmas de uma matrícula específica
+    public List<MatriculaTurmaDTO> findMatriculaTurmasByMatriculaId(Long matriculaId) {
+        List<MatriculaTurma> matriculaTurmas = matriculaTurmaRepository.findByMatriculaId(matriculaId);
+        return matriculaTurmas.stream().map(MatriculaTurmaDTO::new).toList();
+    }
+
+    // Buscar notas de uma matrícula-turma específica
+    public List<NotaDTO> findNotasByMatriculaTurmaId(Long matriculaTurmaId) {
+        List<Nota> notas = notaRepository.findByMatriculaTurmaId(matriculaTurmaId);
+        return notas.stream().map(NotaDTO::new).toList();
     }
 
 }

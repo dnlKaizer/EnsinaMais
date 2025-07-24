@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cefet.ensina_mais.dto.AlunoDTO;
+import com.cefet.ensina_mais.dto.MatriculaDTO;
+import com.cefet.ensina_mais.dto.MatriculaTurmaDTO;
+import com.cefet.ensina_mais.dto.NotaDTO;
 import com.cefet.ensina_mais.services.AlunoService;
 
 @RestController
@@ -38,6 +41,41 @@ public class AlunoController {
     public ResponseEntity<List<AlunoDTO>> findAll() {
         List<AlunoDTO> alunoDTOs = alunoService.findAll();
         return ResponseEntity.ok(alunoDTOs);
+    }
+
+    // Endpoint para buscar matrículas de um aluno
+    @GetMapping("/{id}/matriculas")
+    public ResponseEntity<List<MatriculaDTO>> findMatriculasByAlunoId(@PathVariable Long id) {
+        List<MatriculaDTO> matriculas = alunoService.findMatriculasByAlunoId(id);
+        return ResponseEntity.ok(matriculas);
+    }
+
+    // Endpoint para buscar matrículas-turmas de um aluno
+    @GetMapping("/{id}/matriculas-turmas")
+    public ResponseEntity<List<MatriculaTurmaDTO>> findMatriculaTurmasByAlunoId(@PathVariable Long id) {
+        List<MatriculaTurmaDTO> matriculaTurmas = alunoService.findMatriculaTurmasByAlunoId(id);
+        return ResponseEntity.ok(matriculaTurmas);
+    }
+
+    // Endpoint para buscar notas de um aluno
+    @GetMapping("/{id}/notas")
+    public ResponseEntity<List<NotaDTO>> findNotasByAlunoId(@PathVariable Long id) {
+        List<NotaDTO> notas = alunoService.findNotasByAlunoId(id);
+        return ResponseEntity.ok(notas);
+    }
+
+    // Endpoint para buscar matrículas-turmas de uma matrícula específica
+    @GetMapping("/{alunoId}/matriculas/{matriculaId}/matriculas-turmas")
+    public ResponseEntity<List<MatriculaTurmaDTO>> findMatriculaTurmasByMatriculaId(@PathVariable Long alunoId, @PathVariable Long matriculaId) {
+        List<MatriculaTurmaDTO> matriculaTurmas = alunoService.findMatriculaTurmasByMatriculaId(matriculaId);
+        return ResponseEntity.ok(matriculaTurmas);
+    }
+
+    // Endpoint para buscar notas de uma matrícula-turma específica
+    @GetMapping("/{alunoId}/matriculas-turmas/{matriculaTurmaId}/notas")
+    public ResponseEntity<List<NotaDTO>> findNotasByMatriculaTurmaId(@PathVariable Long alunoId, @PathVariable Long matriculaTurmaId) {
+        List<NotaDTO> notas = alunoService.findNotasByMatriculaTurmaId(matriculaTurmaId);
+        return ResponseEntity.ok(notas);
     }
 
     @PostMapping
