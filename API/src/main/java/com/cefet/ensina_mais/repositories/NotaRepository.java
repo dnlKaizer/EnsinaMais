@@ -11,4 +11,7 @@ public interface NotaRepository extends JpaRepository<Nota, Long> {
     public List<Nota> findByAvaliacaoId(Long avaliacaoId);
 
     public List<Nota> findByMatriculaTurmaId(Long matriculaTurmaId);
+    
+    // Método para verificar se já existe nota para uma avaliação específica e matrícula-turma
+    public List<Nota> findByAvaliacaoIdAndMatriculaTurmaId(Long avaliacaoId, Long matriculaTurmaId);
 }

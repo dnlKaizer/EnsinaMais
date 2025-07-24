@@ -7,9 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import com.cefet.ensina_mais.dto.AvaliacaoDTO;
 import com.cefet.ensina_mais.entities.Avaliacao;
+import com.cefet.ensina_mais.entities.MatriculaTurma;
 import com.cefet.ensina_mais.entities.Nota;
 import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.AvaliacaoRepository;
+import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
 import com.cefet.ensina_mais.repositories.NotaRepository;
 import com.cefet.ensina_mais.repositories.TurmaRepository;
 
@@ -26,6 +28,9 @@ public class AvaliacaoService {
     @Autowired
     private NotaRepository notaRepository;
 
+    @Autowired
+    private MatriculaTurmaRepository matriculaTurmaRepository;
+
     public List<AvaliacaoDTO> findAll() {
         List<Avaliacao> lista = avaliacaoRepository.findAll();
         return lista.stream().map(AvaliacaoDTO::new).toList();
@@ -37,6 +42,7 @@ public class AvaliacaoService {
         return new AvaliacaoDTO(avaliacao);
     }
 
+    @Transactional
     public AvaliacaoDTO insert(AvaliacaoDTO dto) {
         if (dto.getData() == null)
             throw new IllegalArgumentException("A data da avaliação não pode ser vazia.");
@@ -50,13 +56,44 @@ public class AvaliacaoService {
         Turma turma = turmaRepository.findById(dto.getIdTurma())
                 .orElseThrow(() -> new EntityNotFoundException("Turma não encontrada com ID: " + dto.getIdTurma()));
 
+        // 1. Criar a avaliação
         Avaliacao avaliacao = new Avaliacao();
         avaliacao.setData(dto.getData());
         avaliacao.setDescricao(dto.getDescricao());
         avaliacao.setNotaMaxima(dto.getNotaMaxima());
         avaliacao.setTurma(turma);
         avaliacao = avaliacaoRepository.save(avaliacao);
+
+        // 2. Criar notas automaticamente para todos os alunos da turma
+        criarNotasParaAlunosDaTurma(avaliacao);
+
         return new AvaliacaoDTO(avaliacao);
+    }
+
+    /**
+     * Cria automaticamente notas (vazias/null) para todos os alunos matriculados na turma
+     * quando uma nova avaliação é criada
+     */
+    private void criarNotasParaAlunosDaTurma(Avaliacao avaliacao) {
+        // Buscar todas as matrículas-turmas da turma desta avaliação
+        List<MatriculaTurma> matriculasTurma = matriculaTurmaRepository.findByTurmaId(avaliacao.getTurma().getId());
+        
+        for (MatriculaTurma matriculaTurma : matriculasTurma) {
+            // Verificar se já existe nota para esta avaliação e esta matrícula-turma
+            List<Nota> notasExistentes = notaRepository.findByAvaliacaoIdAndMatriculaTurmaId(
+                avaliacao.getId(), 
+                matriculaTurma.getId()
+            );
+            
+            // Se não existe nota, criar uma nova (inicialmente null)
+            if (notasExistentes.isEmpty()) {
+                Nota nota = new Nota();
+                nota.setNota(null); // Nota inicialmente vazia
+                nota.setAvaliacao(avaliacao);
+                nota.setMatriculaTurma(matriculaTurma);
+                notaRepository.save(nota);
+            }
+        }
     }
 
     public AvaliacaoDTO update(Long id, AvaliacaoDTO dto) {
