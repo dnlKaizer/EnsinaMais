@@ -5,6 +5,7 @@ import { ProfessoresPageComponent } from './components/professores-page/professo
 import { AlunosPageComponent } from './components/alunos-page/alunos-page.component';
 import { DisciplinasPageComponent } from './components/disciplinas-page/disciplinas-page.component';
 import { MatriculasPageComponent } from './components/matriculas-page/matriculas-page.component';
+import { TurmasPageComponent } from './components/turmas-page/turmas-page.component';
 
 export const routes: Routes = [
   // Rota padrão - redireciona para login
@@ -25,6 +26,9 @@ export const routes: Routes = [
 
   // Rota para a página disciplinas
   { path: 'disciplinas', component: DisciplinasPageComponent },
+
+  // Rota para a página matrículas
+  { path: 'turmas', component: TurmasPageComponent },
 
   // Rota para a página matrículas
   { path: 'matriculas', component: MatriculasPageComponent },
