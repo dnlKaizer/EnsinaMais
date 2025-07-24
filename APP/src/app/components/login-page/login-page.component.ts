@@ -25,12 +25,22 @@ export class LoginPageComponent {
     this.inicializarPagina();
   }
 
+  private navegar() {
+    if (this.authService.isAdmin()) {
+      this.router.navigate(['/home']);
+    } else if (this.authService.isProfessor()) {
+      this.router.navigate(['/professor']);
+    } else if (this.authService.isAluno()) {
+      this.router.navigate(['/aluno']);
+    }
+  }
+
   // Função que executa antes da página carregar
   private inicializarPagina() {
     // Verificar se usuário já está logado
     if (this.authService.isLoggedIn()) {
       console.log('Usuário já está logado, redirecionando...');
-      this.router.navigate(['/home']);
+      this.navegar();
       return;
     }
     // Limpar dados anteriores
@@ -59,7 +69,7 @@ export class LoginPageComponent {
       });
 
       // Redirecionar para a página home
-      this.router.navigate(['/home']);
+      this.navegar();
       
       console.log('Login realizado com sucesso!', response);
     } catch (error: any) {
