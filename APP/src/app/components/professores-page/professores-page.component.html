@@ -90,7 +90,7 @@
     </div>
 </div>
 
-<!-- Modal de Detalhes do Professor -->
+<!-- Modal de Detalhes/Edição/Criação do Professor -->
 <div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" *ngIf="showModal"
     tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -98,12 +98,20 @@
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title">
                     <i class="fas fa-user-tie me-2"></i>
-                    Detalhes do Professor
+                    {{ getModalTitle() }}
                 </h5>
                 <button type="button" class="btn-close btn-close-white" (click)="fecharModal()"></button>
             </div>
-            <div class="modal-body" *ngIf="selectedProfessor">
-                <div class="row px-5">
+            
+            <!-- Mensagem de erro -->
+            <div class="alert alert-danger mx-3 mt-3" *ngIf="errorMessage" role="alert">
+                {{ errorMessage }}
+                <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Modo Visualização -->
+                <div *ngIf="modalMode === ModalMode.VIEW && selectedProfessor" class="row px-5">
                     <div class="col-6 mb-3">
                         <label class="form-label fw-bold text-muted">Nome:</label>
                         <p class="fs-5">{{ selectedProfessor.nome || 'Nome não informado' }}</p>
@@ -130,19 +138,91 @@
                         <p class="fs-6 text-muted">#{{ selectedProfessor.id }}</p>
                     </div>
                 </div>
+
+                <!-- Modo Edição/Criação -->
+                <div *ngIf="modalMode === ModalMode.EDIT || modalMode === ModalMode.CREATE" class="row px-5">
+                    <div class="col-12 mb-3">
+                        <label for="nome" class="form-label fw-bold">Nome *</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="nome" 
+                            [(ngModel)]="formData.nome"
+                            placeholder="Digite o nome completo"
+                            [disabled]="isSubmitting">
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="cpf" class="form-label fw-bold">CPF *</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="cpf" 
+                            [(ngModel)]="formData.cpf"
+                            placeholder="000.000.000-00"
+                            [disabled]="isSubmitting">
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="email" class="form-label fw-bold">Email</label>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="email" 
+                            [(ngModel)]="formData.email"
+                            placeholder="email@exemplo.com"
+                            [disabled]="isSubmitting">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="titulacao" class="form-label fw-bold">Titulação *</label>
+                        <select 
+                            class="form-select" 
+                            id="titulacao" 
+                            [(ngModel)]="formData.titulacao"
+                            [disabled]="isSubmitting">
+                            <option value="">Selecione a titulação</option>
+                            <option value="Graduado">Graduado</option>
+                            <option value="Especialista">Especialista</option>
+                            <option value="Mestre">Mestre</option>
+                            <option value="Doutor">Doutor</option>
+                            <option value="Pós-Doutor">Pós-Doutor</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <small class="text-muted">* Campos obrigatórios</small>
+                    </div>
+                </div>
             </div>
+            
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary" (click)="editarProfessor(selectedProfessor!.id)">
-                    <i class="fas fa-edit me-1"></i>
-                    Editar Professor
-                </button>
-                <button type="button" class="btn btn-outline-danger" (click)="excluirProfessor(selectedProfessor!.id)">
-                    <i class="fas fa-trash me-1"></i>
-                    Excluir Professor
-                </button>
-                <button type="button" class="btn btn-secondary" (click)="fecharModal()">
-                    Fechar
-                </button>
+                <!-- Botões para modo Visualização -->
+                <div *ngIf="modalMode === ModalMode.VIEW">
+                    <button type="button" class="btn btn-outline-primary" (click)="abrirModalEdicao(selectedProfessor!)">
+                        <i class="fas fa-edit me-1"></i>
+                        Editar Professor
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" (click)="excluirProfessor(selectedProfessor!.id)">
+                        <i class="fas fa-trash me-1"></i>
+                        Excluir Professor
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="fecharModal()">
+                        Fechar
+                    </button>
+                </div>
+
+                <!-- Botões para modo Edição/Criação -->
+                <div *ngIf="modalMode === ModalMode.EDIT || modalMode === ModalMode.CREATE">
+                    <button 
+                        type="button" 
+                        class="btn btn-primary" 
+                        (click)="salvarProfessor()"
+                        [disabled]="isSubmitting">
+                        <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+                        <i *ngIf="!isSubmitting" class="fas fa-save me-1"></i>
+                        {{ modalMode === ModalMode.CREATE ? 'Criar Professor' : 'Salvar Alterações' }}
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="fecharModal()" [disabled]="isSubmitting">
+                        Cancelar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
