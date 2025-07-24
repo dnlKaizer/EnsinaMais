@@ -37,6 +37,12 @@ public class AlunoController {
         return ResponseEntity.ok(alunoDTO);
     }
 
+    @GetMapping("/usuario/login/{usuarioLogin}")
+    public ResponseEntity<AlunoDTO> findByUsuarioLogin(@PathVariable String usuarioLogin) {
+        AlunoDTO alunoDTO = alunoService.findByUsuarioLogin(usuarioLogin);
+        return ResponseEntity.ok(alunoDTO);
+    }
+
     @GetMapping
     public ResponseEntity<List<AlunoDTO>> findAll() {
         List<AlunoDTO> alunoDTOs = alunoService.findAll();

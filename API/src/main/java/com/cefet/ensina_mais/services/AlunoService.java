@@ -65,6 +65,12 @@ public class AlunoService {
         return new AlunoDTO(aluno);
     }
 
+    public AlunoDTO findByUsuarioLogin(String usuarioLogin) {
+        Aluno aluno = alunoRepository.findByUsuarioLogin(usuarioLogin)
+                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com login de usuário: " + usuarioLogin));
+        return new AlunoDTO(aluno);
+    }
+
     // Inserir Aluno
     public AlunoDTO insert(AlunoDTO alunoDTO) {
         // Verifica se o nome não é nulo ou vazio (Campo Obrigatório)
