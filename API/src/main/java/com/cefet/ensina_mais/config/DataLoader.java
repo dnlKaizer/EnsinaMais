@@ -5,8 +5,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.cefet.ensina_mais.dto.AlunoDTO;
+import com.cefet.ensina_mais.dto.AvaliacaoDTO;
+import com.cefet.ensina_mais.dto.ProfessorDTO;
 import com.cefet.ensina_mais.entities.*;
 import com.cefet.ensina_mais.repositories.*;
+import com.cefet.ensina_mais.services.*;
 
 import java.sql.Date;
 
@@ -17,10 +21,10 @@ public class DataLoader implements CommandLineRunner {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private AlunoRepository alunoRepository;
+    private AlunoService alunoService;
 
     @Autowired
-    private ProfessorRepository professorRepository;
+    private ProfessorService professorService;
 
     @Autowired
     private DisciplinaRepository disciplinaRepository;
@@ -32,13 +36,10 @@ public class DataLoader implements CommandLineRunner {
     private TurmaRepository turmaRepository;
 
     @Autowired
-    private AvaliacaoRepository avaliacaoRepository;
+    private AvaliacaoService avaliacaoService;
 
     @Autowired
     private MatriculaTurmaRepository matriculaTurmaRepository;
-
-    @Autowired
-    private NotaRepository notaRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -62,222 +63,102 @@ public class DataLoader implements CommandLineRunner {
         admin.setNivelAcesso(NivelAcesso.ADMIN);
         usuarioRepository.save(admin);
 
-        Usuario usuarioTesla = new Usuario();
-        usuarioTesla.setLogin("tesla");
-        usuarioTesla.setSenha(passwordEncoder.encode("tesla"));
-        usuarioTesla.setNivelAcesso(NivelAcesso.PROFESSOR);
-        usuarioRepository.save(usuarioTesla);
-
-        Usuario usuarioEuler = new Usuario();
-        usuarioEuler.setLogin("euler");
-        usuarioEuler.setSenha(passwordEncoder.encode("euler"));
-        usuarioEuler.setNivelAcesso(NivelAcesso.PROFESSOR);
-        usuarioRepository.save(usuarioEuler);
-
-        Usuario usuarioEinstein = new Usuario();
-        usuarioEinstein.setLogin("einstein");
-        usuarioEinstein.setSenha(passwordEncoder.encode("einstein"));
-        usuarioEinstein.setNivelAcesso(NivelAcesso.PROFESSOR);
-        usuarioRepository.save(usuarioEinstein);
-
-        Usuario usuarioNewton = new Usuario();
-        usuarioNewton.setLogin("newton");
-        usuarioNewton.setSenha(passwordEncoder.encode("newton"));
-        usuarioNewton.setNivelAcesso(NivelAcesso.PROFESSOR);
-        usuarioRepository.save(usuarioNewton);
-
-        Usuario usuarioDarwin = new Usuario();
-        usuarioDarwin.setLogin("darwin");
-        usuarioDarwin.setSenha(passwordEncoder.encode("darwin"));
-        usuarioDarwin.setNivelAcesso(NivelAcesso.PROFESSOR);
-        usuarioRepository.save(usuarioDarwin);
-
-        Usuario usuarioMarie = new Usuario();
-        usuarioMarie.setLogin("marie");
-        usuarioMarie.setSenha(passwordEncoder.encode("marie"));
-        usuarioMarie.setNivelAcesso(NivelAcesso.PROFESSOR);
-        usuarioRepository.save(usuarioMarie);
-
-        Usuario usuarioGalileo = new Usuario();
-        usuarioGalileo.setLogin("galileo");
-        usuarioGalileo.setSenha(passwordEncoder.encode("galileo"));
-        usuarioGalileo.setNivelAcesso(NivelAcesso.PROFESSOR);
-        usuarioRepository.save(usuarioGalileo);
-
-        Usuario usuarioKepler = new Usuario();
-        usuarioKepler.setLogin("kepler");
-        usuarioKepler.setSenha(passwordEncoder.encode("kepler"));
-        usuarioKepler.setNivelAcesso(NivelAcesso.PROFESSOR);
-        usuarioRepository.save(usuarioKepler);
-
-        Usuario usuarioGeraldo = new Usuario();
-        usuarioGeraldo.setLogin("geraldo");
-        usuarioGeraldo.setSenha(passwordEncoder.encode("geraldo"));
-        usuarioGeraldo.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioGeraldo);
-
-        Usuario usuarioManual = new Usuario();
-        usuarioManual.setLogin("manual");
-        usuarioManual.setSenha(passwordEncoder.encode("manual"));
-        usuarioManual.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioManual);
-
-        Usuario usuarioRobson = new Usuario();
-        usuarioRobson.setLogin("robson");
-        usuarioRobson.setSenha(passwordEncoder.encode("robson"));
-        usuarioRobson.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioRobson);
-
-        Usuario usuarioAna = new Usuario();
-        usuarioAna.setLogin("ana");
-        usuarioAna.setSenha(passwordEncoder.encode("ana"));
-        usuarioAna.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioAna);
-
-        Usuario usuarioCarlos = new Usuario();
-        usuarioCarlos.setLogin("carlos");
-        usuarioCarlos.setSenha(passwordEncoder.encode("carlos"));
-        usuarioCarlos.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioCarlos);
-
-        Usuario usuarioMaria = new Usuario();
-        usuarioMaria.setLogin("maria");
-        usuarioMaria.setSenha(passwordEncoder.encode("maria"));
-        usuarioMaria.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioMaria);
-
-        Usuario usuarioJoao = new Usuario();
-        usuarioJoao.setLogin("joao");
-        usuarioJoao.setSenha(passwordEncoder.encode("joao"));
-        usuarioJoao.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioJoao);
-
-        Usuario usuarioLucia = new Usuario();
-        usuarioLucia.setLogin("lucia");
-        usuarioLucia.setSenha(passwordEncoder.encode("lucia"));
-        usuarioLucia.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioLucia);
-
-        Usuario usuarioPedro = new Usuario();
-        usuarioPedro.setLogin("pedro");
-        usuarioPedro.setSenha(passwordEncoder.encode("pedro"));
-        usuarioPedro.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioPedro);
-
-        Usuario usuarioJulia = new Usuario();
-        usuarioJulia.setLogin("julia");
-        usuarioJulia.setSenha(passwordEncoder.encode("julia"));
-        usuarioJulia.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioJulia);
-
-        Usuario usuarioRafael = new Usuario();
-        usuarioRafael.setLogin("rafael");
-        usuarioRafael.setSenha(passwordEncoder.encode("rafael"));
-        usuarioRafael.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioRafael);
-
-        Usuario usuarioLaura = new Usuario();
-        usuarioLaura.setLogin("laura");
-        usuarioLaura.setSenha(passwordEncoder.encode("laura"));
-        usuarioLaura.setNivelAcesso(NivelAcesso.ALUNO);
-        usuarioRepository.save(usuarioLaura);
-
         // 2. Criar Alunos
         Aluno geraldo = new Aluno();
         geraldo.setNome("Geraldo");
         geraldo.setCpf("793.613.590-10");
         geraldo.setEmail("geraldo@gmail.com");
         geraldo.setDataNascimento(Date.valueOf("2008-09-14"));
-        geraldo.setUsuario(usuarioGeraldo);
-        alunoRepository.save(geraldo);
+        AlunoDTO geraldoDTO = alunoService.insert(new AlunoDTO(geraldo, false));
+        Aluno geraldoEntity =alunoService.findAlunoById(geraldoDTO.getId());
 
         Aluno robson = new Aluno();
         robson.setNome("Robson");
         robson.setCpf("444.852.110-96");
         robson.setEmail("robson@gmail.com");
         robson.setDataNascimento(Date.valueOf("2009-01-12"));
-        robson.setUsuario(usuarioRobson);
-        alunoRepository.save(robson);
+        AlunoDTO robsonDTO = alunoService.insert(new AlunoDTO(robson, false));
+        Aluno robsonEntity =alunoService.findAlunoById(robsonDTO.getId());
 
         Aluno manual = new Aluno();
         manual.setNome("Manual");
         manual.setCpf("935.469.520-57");
         manual.setEmail("manual@gmail.com");
         manual.setDataNascimento(Date.valueOf("2008-12-10"));
-        manual.setUsuario(usuarioManual);
-        alunoRepository.save(manual);
+        AlunoDTO manualDTO = alunoService.insert(new AlunoDTO(manual, false));
+        Aluno manualEntity =alunoService.findAlunoById(manualDTO.getId());
 
         Aluno ana = new Aluno();
         ana.setNome("Ana Silva");
         ana.setCpf("123.456.789-01");
         ana.setEmail("ana@gmail.com");
         ana.setDataNascimento(Date.valueOf("2007-03-15"));
-        ana.setUsuario(usuarioAna);
-        alunoRepository.save(ana);
+        AlunoDTO anaDTO = alunoService.insert(new AlunoDTO(ana, false));
+        Aluno anaEntity =alunoService.findAlunoById(anaDTO.getId());
 
         Aluno carlos = new Aluno();
         carlos.setNome("Carlos Santos");
         carlos.setCpf("234.567.890-12");
         carlos.setEmail("carlos@gmail.com");
         carlos.setDataNascimento(Date.valueOf("2008-07-22"));
-        carlos.setUsuario(usuarioCarlos);
-        alunoRepository.save(carlos);
+        AlunoDTO carlosDTO = alunoService.insert(new AlunoDTO(carlos, false));
+        Aluno carlosEntity =alunoService.findAlunoById(carlosDTO.getId());
 
         Aluno maria = new Aluno();
         maria.setNome("Maria Oliveira");
         maria.setCpf("345.678.901-23");
         maria.setEmail("maria@gmail.com");
         maria.setDataNascimento(Date.valueOf("2007-11-08"));
-        maria.setUsuario(usuarioMaria);
-        alunoRepository.save(maria);
+        AlunoDTO mariaDTO = alunoService.insert(new AlunoDTO(maria, false));
+        Aluno mariaEntity =alunoService.findAlunoById(mariaDTO.getId());
 
         Aluno joao = new Aluno();
         joao.setNome("João Costa");
         joao.setCpf("456.789.012-34");
         joao.setEmail("joao@gmail.com");
         joao.setDataNascimento(Date.valueOf("2008-05-18"));
-        joao.setUsuario(usuarioJoao);
-        alunoRepository.save(joao);
+        AlunoDTO joaoDTO = alunoService.insert(new AlunoDTO(joao, false));
+        Aluno joaoEntity =alunoService.findAlunoById(joaoDTO.getId());
 
         Aluno lucia = new Aluno();
         lucia.setNome("Lucia Ferreira");
         lucia.setCpf("567.890.123-45");
         lucia.setEmail("lucia@gmail.com");
         lucia.setDataNascimento(Date.valueOf("2007-09-30"));
-        lucia.setUsuario(usuarioLucia);
-        alunoRepository.save(lucia);
+        AlunoDTO luciaDTO = alunoService.insert(new AlunoDTO(lucia, false));
+        Aluno luciaEntity =alunoService.findAlunoById(luciaDTO.getId());
 
         Aluno pedro = new Aluno();
         pedro.setNome("Pedro Lima");
         pedro.setCpf("678.901.234-56");
         pedro.setEmail("pedro@gmail.com");
         pedro.setDataNascimento(Date.valueOf("2008-02-14"));
-        pedro.setUsuario(usuarioPedro);
-        alunoRepository.save(pedro);
+        AlunoDTO pedroDTO = alunoService.insert(new AlunoDTO(pedro, false));
+        Aluno pedroEntity =alunoService.findAlunoById(pedroDTO.getId());
 
         Aluno julia = new Aluno();
         julia.setNome("Julia Rocha");
         julia.setCpf("789.012.345-67");
         julia.setEmail("julia@gmail.com");
         julia.setDataNascimento(Date.valueOf("2007-12-25"));
-        julia.setUsuario(usuarioJulia);
-        alunoRepository.save(julia);
+        AlunoDTO juliaDTO = alunoService.insert(new AlunoDTO(julia, false));
+        Aluno juliaEntity =alunoService.findAlunoById(juliaDTO.getId());
 
         Aluno rafael = new Aluno();
         rafael.setNome("Rafael Souza");
         rafael.setCpf("890.123.456-78");
         rafael.setEmail("rafael@gmail.com");
         rafael.setDataNascimento(Date.valueOf("2008-08-10"));
-        rafael.setUsuario(usuarioRafael);
-        alunoRepository.save(rafael);
+        AlunoDTO rafaelDTO = alunoService.insert(new AlunoDTO(rafael, false));
+        Aluno rafaelEntity =alunoService.findAlunoById(rafaelDTO.getId());
 
         Aluno laura = new Aluno();
         laura.setNome("Laura Alves");
         laura.setCpf("901.234.567-89");
         laura.setEmail("laura@gmail.com");
         laura.setDataNascimento(Date.valueOf("2007-06-03"));
-        laura.setUsuario(usuarioLaura);
-        alunoRepository.save(laura);
+        AlunoDTO lauraDTO = alunoService.insert(new AlunoDTO(laura, false));
+        Aluno lauraEntity =alunoService.findAlunoById(lauraDTO.getId());
 
         // 3. Criar Professores
         Professor tesla = new Professor();
@@ -285,64 +166,64 @@ public class DataLoader implements CommandLineRunner {
         tesla.setCpf("206.366.250-95");
         tesla.setEmail("tesla@gmail.com");
         tesla.setTitulacao("Mestre");
-        tesla.setUsuario(usuarioTesla);
-        professorRepository.save(tesla);
+        ProfessorDTO teslaDTO = professorService.insert(new ProfessorDTO(tesla, false));
+        Professor teslaEntity = professorService.findProfessorById(teslaDTO.getId());
 
         Professor einstein = new Professor();
         einstein.setNome("Einstein");
         einstein.setCpf("292.060.350-70");
         einstein.setEmail("einstein@gmail.com");
         einstein.setTitulacao("Doutor");
-        einstein.setUsuario(usuarioEinstein);
-        professorRepository.save(einstein);
+        ProfessorDTO einsteinDTO = professorService.insert(new ProfessorDTO(einstein, false));
+        Professor einsteinEntity = professorService.findProfessorById(einsteinDTO.getId());
 
         Professor euler = new Professor();
         euler.setNome("Euler");
         euler.setCpf("680.718.410-72");
         euler.setEmail("euler@gmail.com");
         euler.setTitulacao("Doutor");
-        euler.setUsuario(usuarioEuler);
-        professorRepository.save(euler);
+        ProfessorDTO eulerDTO = professorService.insert(new ProfessorDTO(euler, false));
+        Professor eulerEntity = professorService.findProfessorById(eulerDTO.getId());
 
         Professor newton = new Professor();
         newton.setNome("Isaac Newton");
         newton.setCpf("111.222.333-44");
         newton.setEmail("newton@gmail.com");
         newton.setTitulacao("Doutor");
-        newton.setUsuario(usuarioNewton);
-        professorRepository.save(newton);
+        ProfessorDTO newtonDTO = professorService.insert(new ProfessorDTO(newton, false));
+        Professor newtonEntity = professorService.findProfessorById(newtonDTO.getId());
 
         Professor darwin = new Professor();
         darwin.setNome("Charles Darwin");
         darwin.setCpf("222.333.444-55");
         darwin.setEmail("darwin@gmail.com");
         darwin.setTitulacao("Doutor");
-        darwin.setUsuario(usuarioDarwin);
-        professorRepository.save(darwin);
+        ProfessorDTO darwinDTO = professorService.insert(new ProfessorDTO(darwin, false));
+        Professor darwinEntity = professorService.findProfessorById(darwinDTO.getId());
 
         Professor marie = new Professor();
         marie.setNome("Marie Curie");
         marie.setCpf("333.444.555-66");
         marie.setEmail("marie@gmail.com");
         marie.setTitulacao("Doutora");
-        marie.setUsuario(usuarioMarie);
-        professorRepository.save(marie);
+        ProfessorDTO marieDTO = professorService.insert(new ProfessorDTO(marie, false));
+        Professor marieEntity = professorService.findProfessorById(marieDTO.getId());
 
         Professor galileo = new Professor();
         galileo.setNome("Galileo Galilei");
         galileo.setCpf("444.555.666-77");
         galileo.setEmail("galileo@gmail.com");
         galileo.setTitulacao("Mestre");
-        galileo.setUsuario(usuarioGalileo);
-        professorRepository.save(galileo);
+        ProfessorDTO galileoDTO = professorService.insert(new ProfessorDTO(galileo, false));
+        Professor galileoEntity = professorService.findProfessorById(galileoDTO.getId());
 
         Professor kepler = new Professor();
         kepler.setNome("Johannes Kepler");
         kepler.setCpf("555.666.777-88");
         kepler.setEmail("kepler@gmail.com");
         kepler.setTitulacao("Doutor");
-        kepler.setUsuario(usuarioKepler);
-        professorRepository.save(kepler);
+        ProfessorDTO keplerDTO = professorService.insert(new ProfessorDTO(kepler, false));
+        Professor keplerEntity = professorService.findProfessorById(keplerDTO.getId());
 
         // 4. Criar Disciplinas
         Disciplina geometria = new Disciplina();
@@ -381,129 +262,129 @@ public class DataLoader implements CommandLineRunner {
         Matricula matricula1 = new Matricula();
         matricula1.setNumero("20250001");
         matricula1.setData(Date.valueOf("2025-01-12"));
-        matricula1.setAluno(geraldo);
+        matricula1.setAluno(geraldoEntity);
         matriculaRepository.save(matricula1);
 
         Matricula matricula2 = new Matricula();
         matricula2.setNumero("20250002");
         matricula2.setData(Date.valueOf("2025-01-21"));
-        matricula2.setAluno(robson);
+        matricula2.setAluno(robsonEntity);
         matriculaRepository.save(matricula2);
 
         Matricula matricula3 = new Matricula();
         matricula3.setNumero("20250003");
         matricula3.setData(Date.valueOf("2025-02-01"));
-        matricula3.setAluno(manual);
+        matricula3.setAluno(manualEntity);
         matriculaRepository.save(matricula3);
 
         Matricula matricula4 = new Matricula();
         matricula4.setNumero("20250004");
         matricula4.setData(Date.valueOf("2025-02-05"));
-        matricula4.setAluno(ana);
+        matricula4.setAluno(anaEntity);
         matriculaRepository.save(matricula4);
 
         Matricula matricula5 = new Matricula();
         matricula5.setNumero("20250005");
         matricula5.setData(Date.valueOf("2025-02-10"));
-        matricula5.setAluno(carlos);
+        matricula5.setAluno(carlosEntity);
         matriculaRepository.save(matricula5);
 
         Matricula matricula6 = new Matricula();
         matricula6.setNumero("20250006");
         matricula6.setData(Date.valueOf("2025-02-15"));
-        matricula6.setAluno(maria);
+        matricula6.setAluno(mariaEntity);
         matriculaRepository.save(matricula6);
 
         Matricula matricula7 = new Matricula();
         matricula7.setNumero("20250007");
         matricula7.setData(Date.valueOf("2025-02-20"));
-        matricula7.setAluno(joao);
+        matricula7.setAluno(joaoEntity);
         matriculaRepository.save(matricula7);
 
         Matricula matricula8 = new Matricula();
         matricula8.setNumero("20250008");
         matricula8.setData(Date.valueOf("2025-02-25"));
-        matricula8.setAluno(lucia);
+        matricula8.setAluno(luciaEntity);
         matriculaRepository.save(matricula8);
 
         Matricula matricula9 = new Matricula();
         matricula9.setNumero("20250009");
         matricula9.setData(Date.valueOf("2025-03-01"));
-        matricula9.setAluno(pedro);
+        matricula9.setAluno(pedroEntity);
         matriculaRepository.save(matricula9);
 
         Matricula matricula10 = new Matricula();
         matricula10.setNumero("20250010");
         matricula10.setData(Date.valueOf("2025-03-05"));
-        matricula10.setAluno(julia);
+        matricula10.setAluno(juliaEntity);
         matriculaRepository.save(matricula10);
 
         Matricula matricula11 = new Matricula();
         matricula11.setNumero("20250011");
         matricula11.setData(Date.valueOf("2025-03-10"));
-        matricula11.setAluno(rafael);
+        matricula11.setAluno(rafaelEntity);
         matriculaRepository.save(matricula11);
 
         Matricula matricula12 = new Matricula();
         matricula12.setNumero("20250012");
         matricula12.setData(Date.valueOf("2025-03-15"));
-        matricula12.setAluno(laura);
+        matricula12.setAluno(lauraEntity);
         matriculaRepository.save(matricula12);
 
         // 6. Criar Turmas
         Turma turma1 = new Turma();
         turma1.setSemestre("2025.1");
         turma1.setVagas(40);
-        turma1.setProfessor(tesla);
+        turma1.setProfessor(teslaEntity);
         turma1.setDisciplina(geometria);
         turmaRepository.save(turma1);
 
         Turma turma2 = new Turma();
         turma2.setSemestre("2025.1");
         turma2.setVagas(60);
-        turma2.setProfessor(einstein);
+        turma2.setProfessor(einsteinEntity);
         turma2.setDisciplina(algebra);
         turmaRepository.save(turma2);
 
         Turma turma3 = new Turma();
         turma3.setSemestre("2025.1");
         turma3.setVagas(25);
-        turma3.setProfessor(euler);
+        turma3.setProfessor(eulerEntity);
         turma3.setDisciplina(quimica);
         turmaRepository.save(turma3);
 
         Turma turma4 = new Turma();
         turma4.setSemestre("2025.1");
         turma4.setVagas(35);
-        turma4.setProfessor(newton);
+        turma4.setProfessor(newtonEntity);
         turma4.setDisciplina(fisica);
         turmaRepository.save(turma4);
 
         Turma turma5 = new Turma();
         turma5.setSemestre("2025.1");
         turma5.setVagas(30);
-        turma5.setProfessor(darwin);
+        turma5.setProfessor(darwinEntity);
         turma5.setDisciplina(biologia);
         turmaRepository.save(turma5);
 
         Turma turma6 = new Turma();
         turma6.setSemestre("2025.1");
         turma6.setVagas(40);
-        turma6.setProfessor(marie);
+        turma6.setProfessor(marieEntity);
         turma6.setDisciplina(historia);
         turmaRepository.save(turma6);
 
         Turma turma7 = new Turma();
         turma7.setSemestre("2025.1");
         turma7.setVagas(28);
-        turma7.setProfessor(galileo);
+        turma7.setProfessor(galileoEntity);
         turma7.setDisciplina(geografia);
         turmaRepository.save(turma7);
 
         Turma turma8 = new Turma();
         turma8.setSemestre("2025.1");
         turma8.setVagas(20);
-        turma8.setProfessor(kepler);
+        turma8.setProfessor(keplerEntity);
         turma8.setDisciplina(astronomia);
         turmaRepository.save(turma8);
 
@@ -513,35 +394,35 @@ public class DataLoader implements CommandLineRunner {
         avaliacao1.setDescricao("Avaliação 1");
         avaliacao1.setNotaMaxima(30.0);
         avaliacao1.setTurma(turma1);
-        avaliacaoRepository.save(avaliacao1);
+        avaliacaoService.insert(new AvaliacaoDTO(avaliacao1));
 
         Avaliacao avaliacao2 = new Avaliacao();
         avaliacao2.setData(Date.valueOf("2025-03-10"));
         avaliacao2.setDescricao("Avaliação 2");
         avaliacao2.setNotaMaxima(35.0);
         avaliacao2.setTurma(turma1);
-        avaliacaoRepository.save(avaliacao2);
+        avaliacaoService.insert(new AvaliacaoDTO(avaliacao2));
 
         Avaliacao avaliacao3 = new Avaliacao();
         avaliacao3.setData(Date.valueOf("2025-02-12"));
         avaliacao3.setDescricao("Avaliação 1");
         avaliacao3.setNotaMaxima(40.0);
         avaliacao3.setTurma(turma2);
-        avaliacaoRepository.save(avaliacao3);
+        avaliacaoService.insert(new AvaliacaoDTO(avaliacao3));
 
         Avaliacao avaliacao4 = new Avaliacao();
         avaliacao4.setData(Date.valueOf("2025-02-20"));
         avaliacao4.setDescricao("Prova de Química");
         avaliacao4.setNotaMaxima(50.0);
         avaliacao4.setTurma(turma3);
-        avaliacaoRepository.save(avaliacao4);
+        avaliacaoService.insert(new AvaliacaoDTO(avaliacao4));
 
         Avaliacao avaliacao5 = new Avaliacao();
         avaliacao5.setData(Date.valueOf("2025-03-01"));
         avaliacao5.setDescricao("Teste de Física");
         avaliacao5.setNotaMaxima(30.0);
         avaliacao5.setTurma(turma4);
-        avaliacaoRepository.save(avaliacao5);
+        avaliacaoService.insert(new AvaliacaoDTO(avaliacao5));
 
         // 8. Criar MatriculaTurma (relaciona matrículas com turmas)
         MatriculaTurma mt1 = new MatriculaTurma();
@@ -811,55 +692,5 @@ public class DataLoader implements CommandLineRunner {
         mt36.setMatricula(matricula12);
         mt36.setTurma(turma7);
         matriculaTurmaRepository.save(mt36);
-
-        // 9. Criar Notas (relaciona avaliações com matrículas em turmas)
-        Nota nota1 = new Nota();
-        nota1.setNota(25.0);
-        nota1.setAvaliacao(avaliacao1);
-        nota1.setMatriculaTurma(mt1);
-        notaRepository.save(nota1);
-
-        Nota nota2 = new Nota();
-        nota2.setNota(20.0);
-        nota2.setAvaliacao(avaliacao2);
-        nota2.setMatriculaTurma(mt1);
-        notaRepository.save(nota2);
-
-        Nota nota3 = new Nota();
-        nota3.setNota(15.0);
-        nota3.setAvaliacao(avaliacao3);
-        nota3.setMatriculaTurma(mt2);
-        notaRepository.save(nota3);
-
-        // Notas adicionais para as novas avaliações
-        Nota nota4 = new Nota();
-        nota4.setNota(42.0);
-        nota4.setAvaliacao(avaliacao4);
-        nota4.setMatriculaTurma(mt3);
-        notaRepository.save(nota4);
-
-        Nota nota5 = new Nota();
-        nota5.setNota(28.0);
-        nota5.setAvaliacao(avaliacao5);
-        nota5.setMatriculaTurma(mt6);
-        notaRepository.save(nota5);
-
-        Nota nota6 = new Nota();
-        nota6.setNota(22.0);
-        nota6.setAvaliacao(avaliacao1);
-        nota6.setMatriculaTurma(mt4);
-        notaRepository.save(nota6);
-
-        Nota nota7 = new Nota();
-        nota7.setNota(35.0);
-        nota7.setAvaliacao(avaliacao3);
-        nota7.setMatriculaTurma(mt5);
-        notaRepository.save(nota7);
-
-        Nota nota8 = new Nota();
-        nota8.setNota(30.0);
-        nota8.setAvaliacao(avaliacao2);
-        nota8.setMatriculaTurma(mt12);
-        notaRepository.save(nota8);
     }
 }

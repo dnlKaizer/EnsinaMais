@@ -71,6 +71,12 @@ public class AlunoService {
         return new AlunoDTO(aluno);
     }
 
+    public Aluno findAlunoById(Long id) {
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com ID: " + id));
+        return aluno;
+    }
+
     public AlunoDTO findByUsuarioId(Long usuarioId) {
         Aluno aluno = alunoRepository.findByUsuarioId(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com ID de usuário: " + usuarioId));
@@ -101,9 +107,12 @@ public class AlunoService {
         if (alunoRepository.existsByCpf(alunoDTO.getCpf()))
             throw new IllegalArgumentException("Já existe um aluno com o CPF: " + alunoDTO.getCpf());
 
+        // Extrair primeiro nome em lowercase para login e senha
+        String primeiroNome = alunoDTO.getNome().split(" ")[0].toLowerCase();
+
         Usuario usuario = new Usuario();
-        usuario.setLogin(alunoDTO.getNome());
-        usuario.setSenha(passwordEncoder.encode(alunoDTO.getNome()));
+        usuario.setLogin(primeiroNome);
+        usuario.setSenha(passwordEncoder.encode(primeiroNome));
         usuario.setNivelAcesso(NivelAcesso.ALUNO);
         usuario = usuarioRepository.save(usuario);
 
