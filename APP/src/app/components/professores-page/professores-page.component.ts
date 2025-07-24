@@ -62,20 +62,20 @@ export class ProfessoresPageComponent {
    * Método executado quando o componente é inicializado
    */
   async ngOnInit() {
-    await this.carregarProfessores();
+    await this.carregar();
   }
 
   /**
    * Adiciona um novo professor
    */ 
-  async adicionarProfessor() {
+  async inserir() {
     this.abrirModalCriacao();
   }
 
   /**
    * Busca a lista de professores na API
    */
-  async carregarProfessores(): Promise<void> {
+  async carregar(): Promise<void> {
     this.isLoading = true;
     this.errorMessage = '';
 
@@ -105,13 +105,13 @@ export class ProfessoresPageComponent {
    * Recarrega a lista de professores
    */
   async recarregar(): Promise<void> {
-    await this.carregarProfessores();
+    await this.carregar();
   }
 
   /**
    * Exclui um professor
    */
-  async excluirProfessor(professorId: number): Promise<void> {
+  async excluir(professorId: number): Promise<void> {
     if (!confirm('Tem certeza que deseja excluir este professor?')) {
       return;
     }
@@ -138,7 +138,7 @@ export class ProfessoresPageComponent {
   /**
    * Edita um professor
    */
-  editarProfessor(professorId: number): void {
+  editar(professorId: number): void {
     const professor = this.professores.find(p => p.id === professorId);
     if (professor) {
       this.abrirModalEdicao(professor);
@@ -206,7 +206,7 @@ export class ProfessoresPageComponent {
   /**
    * Salva os dados do formulário (criar ou editar)
    */
-  async salvarProfessor(): Promise<void> {
+  async salvar(): Promise<void> {
     if (!this.validarFormulario()) {
       return;
     }
@@ -216,13 +216,13 @@ export class ProfessoresPageComponent {
 
     try {
       if (this.modalMode === ModalMode.CREATE) {
-        await this.criarProfessor();
+        await this.create();
       } else if (this.modalMode === ModalMode.EDIT) {
-        await this.atualizarProfessor();
+        await this.atualizar();
       }
       
       this.fecharModal();
-      await this.carregarProfessores(); // Recarrega a lista
+      await this.carregar(); // Recarrega a lista
       
     } catch (error: any) {
       console.error('Erro ao salvar professor:', error);
@@ -235,7 +235,7 @@ export class ProfessoresPageComponent {
   /**
    * Cria um novo professor
    */
-  private async criarProfessor(): Promise<void> {
+  private async create(): Promise<void> {
     const response = await this.authService.authenticatedFetch('/professores', {
       method: 'POST',
       headers: {
@@ -258,7 +258,7 @@ export class ProfessoresPageComponent {
   /**
    * Atualiza um professor existente
    */
-  private async atualizarProfessor(): Promise<void> {
+  private async atualizar(): Promise<void> {
     const response = await this.authService.authenticatedFetch(`/professores/${this.formData.id}`, {
       method: 'PUT',
       headers: {

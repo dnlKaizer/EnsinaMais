@@ -13,7 +13,7 @@
 <div class="container py-4 d-flex justify-content-between w-100">
     <h2>Gerenciar Professores</h2>
     <div class="d-flex gap-2">
-        <button class="btn btn-primary" (click)="adicionarProfessor()">
+        <button class="btn btn-primary" (click)="inserir()">
             Adicionar Professor
         </button>
     </div>
@@ -79,10 +79,10 @@
 
             <!-- Botões de ação -->
             <div class="d-flex flex-row align-items-center h-100">
-                <button class="btn-clear p-2 me-3" (click)="excluirProfessor(professor.id)" title="Excluir professor">
+                <button class="btn-clear p-2 me-3" (click)="excluir(professor.id)" title="Excluir professor">
                     <img class="" src="assets/images/icons/garbage-can-icon.png" alt="Excluir" width="24" height="24">
                 </button>
-                <button class="btn-clear p-2" (click)="editarProfessor(professor.id)" title="Editar professor">
+                <button class="btn-clear p-2" (click)="editar(professor.id)" title="Editar professor">
                     <img class="" src="assets/images/icons/edit-icon.png" alt="Editar" width="24" height="24">
                 </button>
             </div>
@@ -199,7 +199,7 @@
                         <i class="fas fa-edit me-1"></i>
                         Editar Professor
                     </button>
-                    <button type="button" class="btn btn-outline-danger" (click)="excluirProfessor(selectedProfessor!.id)">
+                    <button type="button" class="btn btn-outline-danger" (click)="excluir(selectedProfessor!.id)">
                         <i class="fas fa-trash me-1"></i>
                         Excluir Professor
                     </button>
@@ -213,7 +213,7 @@
                     <button 
                         type="button" 
                         class="btn btn-primary" 
-                        (click)="salvarProfessor()"
+                        (click)="salvar()"
                         [disabled]="isSubmitting">
                         <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
                         <i *ngIf="!isSubmitting" class="fas fa-save me-1"></i>
