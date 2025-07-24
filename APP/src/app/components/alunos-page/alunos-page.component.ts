@@ -86,8 +86,7 @@ export class AlunosPageComponent {
 
       // Converter resposta para JSON
       this.alunos = await response.json();
-
-      this.loggerService.log('Alunos carregados:', this.alunos);
+      
     } catch (error: any) {
       console.error('Erro ao carregar alunos:', error);
       this.errorMessage = error.message || 'Erro ao carregar dados';
