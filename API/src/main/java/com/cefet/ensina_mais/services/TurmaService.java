@@ -8,12 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.TurmaDTO;
+import com.cefet.ensina_mais.entities.Avaliacao;
 import com.cefet.ensina_mais.entities.Disciplina;
+import com.cefet.ensina_mais.entities.MatriculaTurma;
+import com.cefet.ensina_mais.entities.Nota;
 import com.cefet.ensina_mais.entities.Professor;
 import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.AvaliacaoRepository;
 import com.cefet.ensina_mais.repositories.DisciplinaRepository;
 import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
+import com.cefet.ensina_mais.repositories.NotaRepository;
 import com.cefet.ensina_mais.repositories.ProfessorRepository;
 import com.cefet.ensina_mais.repositories.TurmaRepository;
 
@@ -36,6 +40,9 @@ public class TurmaService {
 
     @Autowired
     private MatriculaTurmaRepository matriculaTurmaRepository;
+
+    @Autowired
+    private NotaRepository notaRepository;
 
     // Buscar todos
     public List<TurmaDTO> findAll() {
@@ -121,8 +128,18 @@ public class TurmaService {
         if (!turmaRepository.existsById(id)) {
             throw new EntityNotFoundException("Turma não encontrado com ID: " + id);
         }
-        matriculaTurmaRepository.deleteByTurmaId(id);
-        avaliacaoRepository.deleteByTurmaId(id);
+
+        List<MatriculaTurma> matriculas = matriculaTurmaRepository.findByTurmaId(id);
+        for (MatriculaTurma matriculaTurma : matriculas) {
+            List<Nota> notas = notaRepository.findByMatriculaTurmaId(matriculaTurma.getId());
+            notaRepository.deleteAll(notas);
+
+            matriculaTurmaRepository.delete(matriculaTurma);
+        }
+
+        List<Avaliacao> avaliacoes = avaliacaoRepository.findByTurmaId(id);
+        avaliacaoRepository.deleteAll(avaliacoes);
+
         turmaRepository.deleteById(id);
     }
 }

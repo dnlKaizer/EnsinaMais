@@ -34,7 +34,7 @@ app-root {
 }
 
 /* Remove a borda preta do botão de logout quando clicado/focado */
-.logout-btn {
+.btn-clear {
     outline: none !important;
     border: none !important;
     box-shadow: none !important;

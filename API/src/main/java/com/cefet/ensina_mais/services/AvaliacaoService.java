@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import com.cefet.ensina_mais.dto.AvaliacaoDTO;
 import com.cefet.ensina_mais.entities.Avaliacao;
+import com.cefet.ensina_mais.entities.Nota;
 import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.AvaliacaoRepository;
 import com.cefet.ensina_mais.repositories.NotaRepository;
@@ -86,7 +87,9 @@ public class AvaliacaoService {
         if (!avaliacaoRepository.existsById(id))
             throw new EntityNotFoundException("Avaliação não encontrada com ID: " + id);
 
-        notaRepository.deleteByAvaliacaoId(id);
+        List<Nota> notas = notaRepository.findByAvaliacaoId(id);
+        notaRepository.deleteAll(notas);
+        
         avaliacaoRepository.deleteById(id);
     }
 }

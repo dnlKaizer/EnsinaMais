@@ -8,7 +8,7 @@ import com.cefet.ensina_mais.entities.MatriculaTurma;
 
 public interface MatriculaTurmaRepository extends JpaRepository<MatriculaTurma, Long> {
     
-    public List<MatriculaTurma> deleteByMatriculaId(Long id);
+    public List<MatriculaTurma> findByMatriculaId(Long id);
 
-    public List<MatriculaTurma> deleteByTurmaId(Long id);
+    public List<MatriculaTurma> findByTurmaId(Long id);
 }

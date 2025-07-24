@@ -32,35 +32,35 @@ export class HomePageComponent {
   }
 
   goToAlunosPage() {
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 
   goToProfessoresPage() {
-    this.router.navigate([''])
+    this.router.navigate(['/professores']);
   }
 
   goToTurmasPage() {
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 
   goToDisciplinasPage() {
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 
   goToNotasPage() {
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 
   goToAvaliacoesPage() {
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 
   goToMatriculasPage() {
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 
   goToDesempenhoPage() {
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 
 }

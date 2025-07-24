@@ -9,8 +9,13 @@ import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.AlunoDTO;
 import com.cefet.ensina_mais.entities.Aluno;
+import com.cefet.ensina_mais.entities.Matricula;
+import com.cefet.ensina_mais.entities.MatriculaTurma;
+import com.cefet.ensina_mais.entities.Nota;
 import com.cefet.ensina_mais.repositories.AlunoRepository;
 import com.cefet.ensina_mais.repositories.MatriculaRepository;
+import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
+import com.cefet.ensina_mais.repositories.NotaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -21,6 +26,12 @@ public class AlunoService {
 
     @Autowired
     private MatriculaRepository matriculaRepository;
+
+    @Autowired
+    private MatriculaTurmaRepository matriculaTurmaRepository;
+
+    @Autowired
+    private NotaRepository notaRepository;
 
     // Buscar todos
     public List<AlunoDTO> findAll() {
@@ -93,7 +104,18 @@ public class AlunoService {
         if (!alunoRepository.existsById(id)) {
             throw new EntityNotFoundException("Aluno não encontrado com ID: " + id);
         }
-        matriculaRepository.deleteByAlunoId(id);
+        List<Matricula> matriculas = matriculaRepository.findByAlunoId(id);
+        for (Matricula matricula : matriculas) {
+            List<MatriculaTurma> matriculaTurmas = matriculaTurmaRepository.findByMatriculaId(matricula.getId());
+            for (MatriculaTurma matriculaTurma : matriculaTurmas) {
+                List<Nota> notas = notaRepository.findByMatriculaTurmaId(matriculaTurma.getId());
+                notaRepository.deleteAll(notas);
+                
+                matriculaTurmaRepository.delete(matriculaTurma);
+            }
+            matriculaRepository.deleteById(matricula.getId());
+        }
+        
         alunoRepository.deleteById(id);
     }
 
