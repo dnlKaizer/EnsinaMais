@@ -66,7 +66,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let matriculaTurma of matriculaTurmas; let i = index">
+                                <tr *ngFor="let matriculaTurma of matriculaTurmas; let i = index" 
+                                    (click)="navegarParaTurma(matriculaTurma.id)"
+                                    role="button"
+                                    tabindex="0"
+                                    (keydown.enter)="navegarParaTurma(matriculaTurma.id)"
+                                    (keydown.space)="navegarParaTurma(matriculaTurma.id)">
                                     <td>{{ getTurmaBySemestre(i) }}</td>
                                     <td>{{ getDisciplinaByIndex(i) }}</td>
                                     <td>

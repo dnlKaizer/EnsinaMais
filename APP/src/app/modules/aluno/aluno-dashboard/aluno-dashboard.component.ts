@@ -265,4 +265,13 @@ export class AlunoDashboardComponent {
         return 'Desconhecido';
     }
   }
+
+  /**
+   * Navega para a página de detalhes da turma
+   */
+  navegarParaTurma(matriculaTurmaId: number): void {
+    this.router.navigate(['/aluno/turma'], {
+      queryParams: { matriculaTurmaId: matriculaTurmaId }
+    });
+  }
 }

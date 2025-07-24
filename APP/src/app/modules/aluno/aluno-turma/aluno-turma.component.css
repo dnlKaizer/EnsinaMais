@@ -24,7 +24,7 @@
 
 .custom-card-body {
     padding: 1.5rem;
-    background: #b9d7ffcc;
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 0 0 13px 13px;
 }
 
@@ -56,7 +56,6 @@
 .custom-table tbody tr {
     background-color: rgba(255, 255, 255, 0.9);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
 }
 
 .custom-table tbody tr:nth-child(even) {
@@ -85,6 +84,7 @@
     text-transform: uppercase;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
+    display: inline-block;
 }
 
 .custom-badge:hover {
@@ -107,7 +107,7 @@
     color: #212529;
 }
 
-/* ===== INFORMAÇÕES PESSOAIS ===== */
+/* ===== INFORMAÇÕES DA TURMA ===== */
 .info-item {
     background: rgba(255, 255, 255, 0.7);
     padding: 0.8rem 1.2rem;
@@ -115,6 +115,9 @@
     margin-bottom: 0.8rem;
     border-left: 4px solid var(--color-dark-blue);
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .info-item:hover {
@@ -127,11 +130,13 @@
     color: var(--color-dark-blue);
     font-weight: 600;
     margin-right: 0.5rem;
+    min-width: 100px;
 }
 
 .info-value {
     color: #495057;
     font-weight: 500;
+    flex: 1;
 }
 
 /* ===== TÍTULO PRINCIPAL ===== */
@@ -170,6 +175,19 @@
     border-left: 5px solid #dc3545;
 }
 
+/* ===== BOTÕES DE NAVEGAÇÃO ===== */
+.btn-clear {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.btn-clear:hover {
+    transform: scale(1.1);
+}
+
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
     .custom-card-header {
@@ -198,6 +216,13 @@
     
     .info-item {
         padding: 0.6rem 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .info-label {
+        min-width: auto;
+        margin-bottom: 0.2rem;
     }
 }
 
@@ -205,5 +230,14 @@
     .dashboard-title {
         font-size: 1.8rem;
         text-align: center;
+    }
+    
+    .custom-table {
+        font-size: 0.85rem;
+    }
+    
+    .custom-table thead th,
+    .custom-table tbody td {
+        padding: 0.6rem 0.4rem;
     }
 }
