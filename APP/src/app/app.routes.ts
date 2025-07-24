@@ -7,6 +7,7 @@ import { DisciplinasPageComponent } from './components/disciplinas-page/discipli
 import { MatriculasPageComponent } from './components/matriculas-page/matriculas-page.component';
 import { AvaliacoesPageComponent } from './components/avaliacoes-page/avaliacoes-page.component';
 import { TurmasPageComponent } from './components/turmas-page/turmas-page.component';
+import { NotasPageComponent } from './components/notas-page/notas-page.component';
 
 export const routes: Routes = [
   // Rota padrão - redireciona para login
@@ -36,6 +37,9 @@ export const routes: Routes = [
 
   // Rota para a página avaliações
   { path: 'avaliacoes', component: AvaliacoesPageComponent },
+
+  // Rota para a página avaliações
+  { path: 'notas', component: NotasPageComponent },
 
   // Rota para páginas não encontradas
   { path: '**', redirectTo: '/login' },

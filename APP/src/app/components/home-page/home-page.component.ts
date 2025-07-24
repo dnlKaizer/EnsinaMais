@@ -48,7 +48,7 @@ export class HomePageComponent {
   }
 
   goToNotasPage() {
-    this.router.navigate(['']);
+    this.router.navigate(['/notas']);
   }
 
   goToAvaliacoesPage() {
