@@ -44,6 +44,11 @@ public class SecurityConfig {
                 // Alunos
                 .requestMatchers(HttpMethod.GET, "/alunos/{id}").hasAnyRole("ADMIN", "PROFESSOR")
                 .requestMatchers(HttpMethod.GET, "/alunos/{usuarioId}").hasAnyRole("ADMIN", "ALUNO")
+                .requestMatchers(HttpMethod.GET, "/alunos/{id}/matriculas").hasAnyRole("ADMIN", "PROFESSOR", "ALUNO")
+                .requestMatchers(HttpMethod.GET, "/alunos/{id}/matriculas-turmas").hasAnyRole("ADMIN", "PROFESSOR", "ALUNO")
+                .requestMatchers(HttpMethod.GET, "/alunos/{id}/notas").hasAnyRole("ADMIN", "PROFESSOR", "ALUNO")
+                .requestMatchers(HttpMethod.GET, "/alunos/{alunoId}/matriculas/{matriculaId}/matriculas-turmas").hasAnyRole("ADMIN", "PROFESSOR", "ALUNO")
+                .requestMatchers(HttpMethod.GET, "/alunos/{alunoId}/matriculas-turmas/{matriculaTurmaId}/notas").hasAnyRole("ADMIN", "PROFESSOR", "ALUNO")
                 .requestMatchers(HttpMethod.POST, "/alunos").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/alunos/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/alunos/**").hasRole("ADMIN")
