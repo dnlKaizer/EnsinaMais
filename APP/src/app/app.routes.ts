@@ -8,6 +8,8 @@ import { MatriculasPageComponent } from './components/matriculas-page/matriculas
 import { AvaliacoesPageComponent } from './components/avaliacoes-page/avaliacoes-page.component';
 import { TurmasPageComponent } from './components/turmas-page/turmas-page.component';
 import { NotasPageComponent } from './components/notas-page/notas-page.component';
+import { AlunoDashboardComponent } from './modules/aluno/aluno-dashboard/aluno-dashboard.component';
+import { AlunoTurmaComponent } from './modules/aluno/aluno-turma/aluno-turma.component';
 
 export const routes: Routes = [
   // Rota padrão - redireciona para login
@@ -40,6 +42,12 @@ export const routes: Routes = [
 
   // Rota para a página avaliações
   { path: 'notas', component: NotasPageComponent },
+
+  // Rota para o módulo do aluno
+  { path: 'aluno', component: AlunoDashboardComponent },
+
+  // Rota para a turma selecionada pelo aluno
+  { path: 'aluno/turma', component: AlunoTurmaComponent },
 
   // Rota para páginas não encontradas
   { path: '**', redirectTo: '/login' },
