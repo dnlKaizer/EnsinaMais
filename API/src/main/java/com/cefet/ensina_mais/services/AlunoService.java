@@ -210,6 +210,13 @@ public class AlunoService {
         return matriculaTurmas.stream().map(MatriculaTurmaDTO::new).toList();
     }
 
+    // Buscar uma matrícula-turma específica por ID
+    public MatriculaTurmaDTO findMatriculaTurmaById(Long matriculaTurmaId) {
+        MatriculaTurma matriculaTurma = matriculaTurmaRepository.findById(matriculaTurmaId)
+                .orElseThrow(() -> new EntityNotFoundException("Matrícula-Turma não encontrada com ID: " + matriculaTurmaId));
+        return new MatriculaTurmaDTO(matriculaTurma);
+    }
+
     // Buscar notas de uma matrícula-turma específica
     public List<NotaDTO> findNotasByMatriculaTurmaId(Long matriculaTurmaId) {
         List<Nota> notas = notaRepository.findByMatriculaTurmaId(matriculaTurmaId);

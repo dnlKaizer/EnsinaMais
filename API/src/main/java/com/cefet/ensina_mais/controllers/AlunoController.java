@@ -81,6 +81,13 @@ public class AlunoController {
         return ResponseEntity.ok(matriculaTurmas);
     }
 
+    // Endpoint para buscar uma matrícula-turma específica por ID
+    @GetMapping("/{alunoId}/matriculas-turmas/{matriculaTurmaId}")
+    public ResponseEntity<MatriculaTurmaDTO> findMatriculaTurmaById(@PathVariable Long alunoId, @PathVariable Long matriculaTurmaId) {
+        MatriculaTurmaDTO matriculaTurma = alunoService.findMatriculaTurmaById(matriculaTurmaId);
+        return ResponseEntity.ok(matriculaTurma);
+    }
+
     // Endpoint para buscar notas de uma matrícula-turma específica
     @GetMapping("/{alunoId}/matriculas-turmas/{matriculaTurmaId}/notas")
     public ResponseEntity<List<NotaDTO>> findNotasByMatriculaTurmaId(@PathVariable Long alunoId, @PathVariable Long matriculaTurmaId) {
