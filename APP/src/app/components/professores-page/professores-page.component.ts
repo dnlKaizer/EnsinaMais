@@ -93,7 +93,7 @@ export class ProfessoresPageComponent {
     }
 
     try {
-      const response = await this.authService.authenticatedFetch(`/usuarios/${professorId}`, {
+      const response = await this.authService.authenticatedFetch(`/professores/${professorId}`, {
         method: 'DELETE'
       });
 
