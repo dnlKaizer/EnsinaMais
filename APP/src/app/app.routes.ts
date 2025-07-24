@@ -5,6 +5,7 @@ import { ProfessoresPageComponent } from './components/professores-page/professo
 import { AlunosPageComponent } from './components/alunos-page/alunos-page.component';
 import { DisciplinasPageComponent } from './components/disciplinas-page/disciplinas-page.component';
 import { MatriculasPageComponent } from './components/matriculas-page/matriculas-page.component';
+import { AvaliacoesPageComponent } from './components/avaliacoes-page/avaliacoes-page.component';
 import { TurmasPageComponent } from './components/turmas-page/turmas-page.component';
 
 export const routes: Routes = [
@@ -32,6 +33,9 @@ export const routes: Routes = [
 
   // Rota para a página matrículas
   { path: 'matriculas', component: MatriculasPageComponent },
+
+  // Rota para a página avaliações
+  { path: 'avaliacoes', component: AvaliacoesPageComponent },
 
   // Rota para páginas não encontradas
   { path: '**', redirectTo: '/login' },

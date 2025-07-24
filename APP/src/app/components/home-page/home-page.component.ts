@@ -52,7 +52,7 @@ export class HomePageComponent {
   }
 
   goToAvaliacoesPage() {
-    this.router.navigate(['']);
+    this.router.navigate(['/avaliacoes']);
   }
 
   goToMatriculasPage() {
