@@ -32,7 +32,7 @@ export class HomePageComponent {
   }
 
   goToAlunosPage() {
-    this.router.navigate(['']);
+    this.router.navigate(['/alunos']);
   }
 
   goToProfessoresPage() {
