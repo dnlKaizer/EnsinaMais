@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.cefet.ensina_mais.dto.MatriculaTurmaDTO;
 import com.cefet.ensina_mais.entities.Matricula;
 import com.cefet.ensina_mais.entities.MatriculaTurma;
+import com.cefet.ensina_mais.entities.Nota;
 import com.cefet.ensina_mais.entities.SituacaoMatricula;
 import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.repositories.MatriculaRepository;
@@ -117,7 +118,9 @@ public class MatriculaTurmaService {
             throw new EntityNotFoundException("Matrícula na turma não encontrada com ID: " + id);
         }
 
-        notaRepository.deleteByMatriculaTurmaId(id);
+        List<Nota> notas = notaRepository.findByMatriculaTurmaId(id);
+        notaRepository.deleteAll(notas);
+        
         matriculaTurmaRepository.deleteById(id);
     }
 }

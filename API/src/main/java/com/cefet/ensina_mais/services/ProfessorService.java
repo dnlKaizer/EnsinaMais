@@ -8,7 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.ProfessorDTO;
+import com.cefet.ensina_mais.entities.Avaliacao;
+import com.cefet.ensina_mais.entities.MatriculaTurma;
+import com.cefet.ensina_mais.entities.Nota;
 import com.cefet.ensina_mais.entities.Professor;
+import com.cefet.ensina_mais.entities.Turma;
+import com.cefet.ensina_mais.repositories.AvaliacaoRepository;
+import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
+import com.cefet.ensina_mais.repositories.NotaRepository;
 import com.cefet.ensina_mais.repositories.ProfessorRepository;
 import com.cefet.ensina_mais.repositories.TurmaRepository;
 
@@ -22,6 +29,15 @@ public class ProfessorService {
 
     @Autowired
     private TurmaRepository turmaRepository;
+
+    @Autowired
+    private MatriculaTurmaRepository matriculaTurmaRepository;
+
+    @Autowired
+    private AvaliacaoRepository avaliacaoRepository;
+
+    @Autowired
+    private NotaRepository notaRepository;
 
     // Buscar todos
     public List<ProfessorDTO> findAll() {
@@ -94,7 +110,22 @@ public class ProfessorService {
         if (!professorRepository.existsById(id)) {
             throw new EntityNotFoundException("Professor não encontrado com ID: " + id);
         }
-        turmaRepository.deleteByProfessorId(id);
+        List<Turma> turmas = turmaRepository.findByProfessorId(id);
+        for (Turma turma : turmas) {
+            List<MatriculaTurma> matriculas = matriculaTurmaRepository.findByTurmaId(id);
+            for (MatriculaTurma matriculaTurma : matriculas) {
+                List<Nota> notas = notaRepository.findByMatriculaTurmaId(matriculaTurma.getId());
+                notaRepository.deleteAll(notas);
+
+                matriculaTurmaRepository.delete(matriculaTurma);
+            }
+
+            List<Avaliacao> avaliacoes = avaliacaoRepository.findByTurmaId(id);
+            avaliacaoRepository.deleteAll(avaliacoes);
+
+            turmaRepository.deleteById(turma.getId());
+        }
+
         professorRepository.deleteById(id);
     }
 }

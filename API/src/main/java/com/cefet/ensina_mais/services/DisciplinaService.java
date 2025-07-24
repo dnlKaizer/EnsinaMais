@@ -8,8 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.DisciplinaDTO;
+import com.cefet.ensina_mais.entities.Avaliacao;
 import com.cefet.ensina_mais.entities.Disciplina;
+import com.cefet.ensina_mais.entities.MatriculaTurma;
+import com.cefet.ensina_mais.entities.Nota;
+import com.cefet.ensina_mais.entities.Turma;
+import com.cefet.ensina_mais.repositories.AvaliacaoRepository;
 import com.cefet.ensina_mais.repositories.DisciplinaRepository;
+import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
+import com.cefet.ensina_mais.repositories.NotaRepository;
 import com.cefet.ensina_mais.repositories.TurmaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -22,6 +29,15 @@ public class DisciplinaService {
 
     @Autowired
     private TurmaRepository turmaRepository;
+
+    @Autowired
+    private MatriculaTurmaRepository matriculaTurmaRepository;
+
+    @Autowired
+    private AvaliacaoRepository avaliacaoRepository;
+
+    @Autowired
+    private NotaRepository notaRepository;
 
     // Buscar todas
     public List<DisciplinaDTO> findAll() {
@@ -75,7 +91,23 @@ public class DisciplinaService {
         if (!disciplinaRepository.existsById(id)) {
             throw new EntityNotFoundException("Disciplina não encontrada com ID: " + id);
         }
-        turmaRepository.deleteByDisciplinaId(id);
+        List<Turma> turmas = turmaRepository.findByDisciplinaId(id);
+        for (Turma turma : turmas) {
+            List<MatriculaTurma> matriculas = matriculaTurmaRepository.findByTurmaId(turma.getId());
+
+            for (MatriculaTurma matriculaTurma : matriculas) {
+                List<Nota> notas = notaRepository.findByMatriculaTurmaId(matriculaTurma.getId());
+                notaRepository.deleteAll(notas);
+
+                matriculaTurmaRepository.delete(matriculaTurma);
+            }
+
+            List<Avaliacao> avaliacoes = avaliacaoRepository.findByTurmaId(turma.getId());
+            avaliacaoRepository.deleteAll(avaliacoes);
+
+            turmaRepository.deleteById(turma.getId());
+        }
+
         disciplinaRepository.deleteById(id);
     }
 

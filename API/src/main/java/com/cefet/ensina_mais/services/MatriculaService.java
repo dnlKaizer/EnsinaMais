@@ -11,9 +11,12 @@ import org.springframework.util.StringUtils;
 import com.cefet.ensina_mais.dto.MatriculaDTO;
 import com.cefet.ensina_mais.entities.Aluno;
 import com.cefet.ensina_mais.entities.Matricula;
+import com.cefet.ensina_mais.entities.MatriculaTurma;
+import com.cefet.ensina_mais.entities.Nota;
 import com.cefet.ensina_mais.repositories.AlunoRepository;
 import com.cefet.ensina_mais.repositories.MatriculaRepository;
 import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
+import com.cefet.ensina_mais.repositories.NotaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -30,6 +33,9 @@ public class MatriculaService {
 
     @Autowired
     private MatriculaTurmaRepository matriculaTurmaRepository;
+
+    @Autowired
+    private NotaRepository notaRepository;
 
     // Buscar todos
     public List<MatriculaDTO> findAll() {
@@ -72,7 +78,14 @@ public class MatriculaService {
             throw new EntityNotFoundException("Matrícula não encontrada com ID: " + id);
         }
 
-        matriculaTurmaRepository.deleteByMatriculaId(id);
+        List<MatriculaTurma> matriculaTurmas = matriculaTurmaRepository.findByMatriculaId(id);
+        for (MatriculaTurma matriculaTurma : matriculaTurmas) {
+            List<Nota> notas = notaRepository.findByMatriculaTurmaId(matriculaTurma.getId());
+            notaRepository.deleteAll(notas);
+            
+            matriculaTurmaRepository.delete(matriculaTurma);
+        }
+
         matriculaRepository.deleteById(id);
     }
 
