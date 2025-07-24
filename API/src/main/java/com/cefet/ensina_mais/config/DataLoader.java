@@ -552,15 +552,15 @@ public class DataLoader implements CommandLineRunner {
         matriculaTurmaRepository.save(mt1);
 
         MatriculaTurma mt2 = new MatriculaTurma();
-        mt2.setSituacao(SituacaoMatricula.REPROVADO); // 0 = Reprovado
-        mt2.setNotaFinal(55.0);
+        mt2.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt2.setNotaFinal(null);
         mt2.setMatricula(matricula2);
         mt2.setTurma(turma2);
         matriculaTurmaRepository.save(mt2);
 
         MatriculaTurma mt3 = new MatriculaTurma();
-        mt3.setSituacao(SituacaoMatricula.APROVADO); // 1 = Aprovado
-        mt3.setNotaFinal(85.0);
+        mt3.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt3.setNotaFinal(null);
         mt3.setMatricula(matricula3);
         mt3.setTurma(turma3);
         matriculaTurmaRepository.save(mt3);
@@ -574,8 +574,8 @@ public class DataLoader implements CommandLineRunner {
         matriculaTurmaRepository.save(mt4);
 
         MatriculaTurma mt5 = new MatriculaTurma();
-        mt5.setSituacao(SituacaoMatricula.APROVADO);
-        mt5.setNotaFinal(78.5);
+        mt5.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt5.setNotaFinal(null);
         mt5.setMatricula(matricula5);
         mt5.setTurma(turma2);
         matriculaTurmaRepository.save(mt5);
@@ -588,15 +588,15 @@ public class DataLoader implements CommandLineRunner {
         matriculaTurmaRepository.save(mt6);
 
         MatriculaTurma mt7 = new MatriculaTurma();
-        mt7.setSituacao(SituacaoMatricula.APROVADO);
-        mt7.setNotaFinal(92.0);
+        mt7.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt7.setNotaFinal(null);
         mt7.setMatricula(matricula7);
         mt7.setTurma(turma5);
         matriculaTurmaRepository.save(mt7);
 
         MatriculaTurma mt8 = new MatriculaTurma();
-        mt8.setSituacao(SituacaoMatricula.REPROVADO);
-        mt8.setNotaFinal(45.0);
+        mt8.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt8.setNotaFinal(null);
         mt8.setMatricula(matricula8);
         mt8.setTurma(turma6);
         matriculaTurmaRepository.save(mt8);
@@ -609,8 +609,8 @@ public class DataLoader implements CommandLineRunner {
         matriculaTurmaRepository.save(mt9);
 
         MatriculaTurma mt10 = new MatriculaTurma();
-        mt10.setSituacao(SituacaoMatricula.APROVADO);
-        mt10.setNotaFinal(88.5);
+        mt10.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt10.setNotaFinal(null);
         mt10.setMatricula(matricula10);
         mt10.setTurma(turma8);
         matriculaTurmaRepository.save(mt10);
@@ -623,8 +623,8 @@ public class DataLoader implements CommandLineRunner {
         matriculaTurmaRepository.save(mt11);
 
         MatriculaTurma mt12 = new MatriculaTurma();
-        mt12.setSituacao(SituacaoMatricula.APROVADO);
-        mt12.setNotaFinal(76.0);
+        mt12.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt12.setNotaFinal(null);
         mt12.setMatricula(matricula12);
         mt12.setTurma(turma1);
         matriculaTurmaRepository.save(mt12);
@@ -638,8 +638,8 @@ public class DataLoader implements CommandLineRunner {
         matriculaTurmaRepository.save(mt13);
 
         MatriculaTurma mt14 = new MatriculaTurma();
-        mt14.setSituacao(SituacaoMatricula.APROVADO);
-        mt14.setNotaFinal(82.0);
+        mt14.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt14.setNotaFinal(null);
         mt14.setMatricula(matricula4);
         mt14.setTurma(turma5);
         matriculaTurmaRepository.save(mt14);
@@ -655,8 +655,8 @@ public class DataLoader implements CommandLineRunner {
         
         // Geraldo (matricula1) - já tem turma1 e turma2, adicionar turma3
         MatriculaTurma mt16 = new MatriculaTurma();
-        mt16.setSituacao(SituacaoMatricula.APROVADO);
-        mt16.setNotaFinal(89.0);
+        mt16.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt16.setNotaFinal(null);
         mt16.setMatricula(matricula1);
         mt16.setTurma(turma3);
         matriculaTurmaRepository.save(mt16);
@@ -670,8 +670,8 @@ public class DataLoader implements CommandLineRunner {
         matriculaTurmaRepository.save(mt17);
 
         MatriculaTurma mt18 = new MatriculaTurma();
-        mt18.setSituacao(SituacaoMatricula.APROVADO);
-        mt18.setNotaFinal(75.5);
+        mt18.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt18.setNotaFinal(null);
         mt18.setMatricula(matricula2);
         mt18.setTurma(turma6);
         matriculaTurmaRepository.save(mt18);
@@ -685,8 +685,8 @@ public class DataLoader implements CommandLineRunner {
         matriculaTurmaRepository.save(mt19);
 
         MatriculaTurma mt20 = new MatriculaTurma();
-        mt20.setSituacao(SituacaoMatricula.REPROVADO);
-        mt20.setNotaFinal(58.0);
+        mt20.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt20.setNotaFinal(null);
         mt20.setMatricula(matricula3);
         mt20.setTurma(turma7);
         matriculaTurmaRepository.save(mt20);
@@ -701,8 +701,8 @@ public class DataLoader implements CommandLineRunner {
 
         // Carlos (matricula5) - já tem turma2, adicionar turma3 e turma4
         MatriculaTurma mt22 = new MatriculaTurma();
-        mt22.setSituacao(SituacaoMatricula.APROVADO);
-        mt22.setNotaFinal(84.0);
+        mt22.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt22.setNotaFinal(null);
         mt22.setMatricula(matricula5);
         mt22.setTurma(turma3);
         matriculaTurmaRepository.save(mt22);
@@ -716,8 +716,8 @@ public class DataLoader implements CommandLineRunner {
 
         // Maria (matricula6) - já tem turma4, adicionar turma1 e turma7
         MatriculaTurma mt24 = new MatriculaTurma();
-        mt24.setSituacao(SituacaoMatricula.APROVADO);
-        mt24.setNotaFinal(91.5);
+        mt24.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt24.setNotaFinal(null);
         mt24.setMatricula(matricula6);
         mt24.setTurma(turma1);
         matriculaTurmaRepository.save(mt24);
@@ -731,16 +731,16 @@ public class DataLoader implements CommandLineRunner {
 
         // João (matricula7) - já tem turma5 e turma8, adicionar turma2
         MatriculaTurma mt26 = new MatriculaTurma();
-        mt26.setSituacao(SituacaoMatricula.REPROVADO);
-        mt26.setNotaFinal(48.5);
+        mt26.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt26.setNotaFinal(null);
         mt26.setMatricula(matricula7);
         mt26.setTurma(turma2);
         matriculaTurmaRepository.save(mt26);
 
         // Lucia (matricula8) - já tem turma6, adicionar turma3 e turma8
         MatriculaTurma mt27 = new MatriculaTurma();
-        mt27.setSituacao(SituacaoMatricula.APROVADO);
-        mt27.setNotaFinal(87.0);
+        mt27.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt27.setNotaFinal(null);
         mt27.setMatricula(matricula8);
         mt27.setTurma(turma3);
         matriculaTurmaRepository.save(mt27);
@@ -754,8 +754,8 @@ public class DataLoader implements CommandLineRunner {
 
         // Pedro (matricula9) - já tem turma7, adicionar turma1 e turma4
         MatriculaTurma mt29 = new MatriculaTurma();
-        mt29.setSituacao(SituacaoMatricula.APROVADO);
-        mt29.setNotaFinal(79.0);
+        mt29.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt29.setNotaFinal(null);
         mt29.setMatricula(matricula9);
         mt29.setTurma(turma1);
         matriculaTurmaRepository.save(mt29);
@@ -769,8 +769,8 @@ public class DataLoader implements CommandLineRunner {
 
         // Julia (matricula10) - já tem turma8, adicionar turma2 e turma5
         MatriculaTurma mt31 = new MatriculaTurma();
-        mt31.setSituacao(SituacaoMatricula.APROVADO);
-        mt31.setNotaFinal(93.5);
+        mt31.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt31.setNotaFinal(null);
         mt31.setMatricula(matricula10);
         mt31.setTurma(turma2);
         matriculaTurmaRepository.save(mt31);
@@ -784,8 +784,8 @@ public class DataLoader implements CommandLineRunner {
 
         // Rafael (matricula11) - já tem turma3, adicionar turma6 e turma1
         MatriculaTurma mt33 = new MatriculaTurma();
-        mt33.setSituacao(SituacaoMatricula.REPROVADO);
-        mt33.setNotaFinal(52.0);
+        mt33.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt33.setNotaFinal(null);
         mt33.setMatricula(matricula11);
         mt33.setTurma(turma6);
         matriculaTurmaRepository.save(mt33);
@@ -799,8 +799,8 @@ public class DataLoader implements CommandLineRunner {
 
         // Laura (matricula12) - já tem turma1, adicionar turma4 e turma7
         MatriculaTurma mt35 = new MatriculaTurma();
-        mt35.setSituacao(SituacaoMatricula.APROVADO);
-        mt35.setNotaFinal(86.5);
+        mt35.setSituacao(SituacaoMatricula.EM_ANDAMENTO);
+        mt35.setNotaFinal(null);
         mt35.setMatricula(matricula12);
         mt35.setTurma(turma4);
         matriculaTurmaRepository.save(mt35);
