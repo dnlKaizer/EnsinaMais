@@ -7,7 +7,7 @@ import com.cefet.ensina_mais.entities.Matricula;
 public class MatriculaDTO {
     
     private Long id;
-    private Long numero;
+    private String numero;
     private Date data;
     private Long idAluno;
 
@@ -25,7 +25,7 @@ public class MatriculaDTO {
         return id;
     }
 
-    public Long getNumero() {
+    public String getNumero() {
         return numero;
     }
 

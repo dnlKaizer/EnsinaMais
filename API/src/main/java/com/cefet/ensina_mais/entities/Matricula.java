@@ -20,7 +20,7 @@ public class Matricula {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private Long numero;
+    private String numero;
 
     @Column(nullable = false)
     private Date data;
@@ -29,7 +29,7 @@ public class Matricula {
     @JoinColumn(name = "aluno_id")
     private Aluno aluno;
 
-    public Matricula(Long id, Long numero, Date data, Aluno aluno) {
+    public Matricula(Long id, String numero, Date data, Aluno aluno) {
         this.id = id;
         this.numero = numero;
         this.data = data;
@@ -47,11 +47,11 @@ public class Matricula {
         this.id = id;
     }
 
-    public Long getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(Long numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

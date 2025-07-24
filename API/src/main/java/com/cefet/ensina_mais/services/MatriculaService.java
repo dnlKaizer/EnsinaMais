@@ -89,7 +89,7 @@ public class MatriculaService {
         matriculaRepository.deleteById(id);
     }
 
-    private Long gerarNumero(Date data) {
-        return (data.toLocalDate().getYear() * 10000l + nMatriculas++);
+    private String gerarNumero(Date data) {
+        return String.valueOf(data.toLocalDate().getYear() * 10000l + nMatriculas++);
     }
 }
