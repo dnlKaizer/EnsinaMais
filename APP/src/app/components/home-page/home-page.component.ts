@@ -56,7 +56,7 @@ export class HomePageComponent {
   }
 
   goToMatriculasPage() {
-    this.router.navigate(['']);
+    this.router.navigate(['/matriculas']);
   }
 
   goToDesempenhoPage() {
