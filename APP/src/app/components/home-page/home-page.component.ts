@@ -44,7 +44,7 @@ export class HomePageComponent {
   }
 
   goToDisciplinasPage() {
-    this.router.navigate(['']);
+    this.router.navigate(['/disciplinas']);
   }
 
   goToNotasPage() {
