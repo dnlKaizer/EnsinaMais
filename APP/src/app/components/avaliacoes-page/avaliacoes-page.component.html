@@ -295,21 +295,28 @@
             />
           </div>
           <div class="col-12 mb-3">
-            <label for="idTurma" class="form-label fw-bold">Turma *</label>
+            <label for="idTurma" class="form-label fw-bold">
+              Turma * @if (turmaFixa) {
+              <small class="text-muted">(pré-selecionada)</small>
+              }
+            </label>
             <select
               class="form-select"
               id="idTurma"
               [(ngModel)]="formData.idTurma"
-              [disabled]="isSubmitting"
+              [disabled]="isSubmitting || turmaFixa"
             >
               <option value="">Selecione uma turma</option>
               <option *ngFor="let turma of turmas" [value]="turma.id">
-                Turma {{ turma.id }} - {{ turma.semestre }} ({{
-                  turma.vagas
-                }}
+                Turma {{ turma.id }} - {{ turma.semestre }} ({{ turma.vagas }}
                 vagas)
               </option>
             </select>
+            @if (turmaFixa) {
+            <small class="text-muted">
+              Esta avaliação será criada para a turma selecionada.
+            </small>
+            }
           </div>
           <div class="col-12">
             <small class="text-muted">* Campos obrigatórios</small>
