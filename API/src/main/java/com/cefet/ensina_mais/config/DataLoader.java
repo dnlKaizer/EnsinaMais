@@ -13,9 +13,13 @@ import com.cefet.ensina_mais.repositories.*;
 import com.cefet.ensina_mais.services.*;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.Random;
 
 @Component
 public class DataLoader implements CommandLineRunner {
+
+    Random random = new Random(1);
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -40,6 +44,9 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired
     private MatriculaTurmaRepository matriculaTurmaRepository;
+
+    @Autowired
+    private NotaRepository notaRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -388,43 +395,7 @@ public class DataLoader implements CommandLineRunner {
         turma8.setDisciplina(astronomia);
         turmaRepository.save(turma8);
 
-        // 7. Criar Avaliações
-        Avaliacao avaliacao1 = new Avaliacao();
-        avaliacao1.setData(Date.valueOf("2025-01-31"));
-        avaliacao1.setDescricao("Avaliação 1");
-        avaliacao1.setNotaMaxima(30.0);
-        avaliacao1.setTurma(turma1);
-        avaliacaoService.insert(new AvaliacaoDTO(avaliacao1));
-
-        Avaliacao avaliacao2 = new Avaliacao();
-        avaliacao2.setData(Date.valueOf("2025-03-10"));
-        avaliacao2.setDescricao("Avaliação 2");
-        avaliacao2.setNotaMaxima(35.0);
-        avaliacao2.setTurma(turma1);
-        avaliacaoService.insert(new AvaliacaoDTO(avaliacao2));
-
-        Avaliacao avaliacao3 = new Avaliacao();
-        avaliacao3.setData(Date.valueOf("2025-02-12"));
-        avaliacao3.setDescricao("Avaliação 1");
-        avaliacao3.setNotaMaxima(40.0);
-        avaliacao3.setTurma(turma2);
-        avaliacaoService.insert(new AvaliacaoDTO(avaliacao3));
-
-        Avaliacao avaliacao4 = new Avaliacao();
-        avaliacao4.setData(Date.valueOf("2025-02-20"));
-        avaliacao4.setDescricao("Prova de Química");
-        avaliacao4.setNotaMaxima(50.0);
-        avaliacao4.setTurma(turma3);
-        avaliacaoService.insert(new AvaliacaoDTO(avaliacao4));
-
-        Avaliacao avaliacao5 = new Avaliacao();
-        avaliacao5.setData(Date.valueOf("2025-03-01"));
-        avaliacao5.setDescricao("Teste de Física");
-        avaliacao5.setNotaMaxima(30.0);
-        avaliacao5.setTurma(turma4);
-        avaliacaoService.insert(new AvaliacaoDTO(avaliacao5));
-
-        // 8. Criar MatriculaTurma (relaciona matrículas com turmas)
+        // 7. Criar MatriculaTurma (relaciona matrículas com turmas)
         MatriculaTurma mt1 = new MatriculaTurma();
         mt1.setSituacao(SituacaoMatricula.EM_ANDAMENTO); // 2 = Em Andamento
         mt1.setNotaFinal(null);
@@ -692,5 +663,70 @@ public class DataLoader implements CommandLineRunner {
         mt36.setMatricula(matricula12);
         mt36.setTurma(turma7);
         matriculaTurmaRepository.save(mt36);
+
+        // 8. Criar Avaliações
+        Avaliacao avaliacao1 = new Avaliacao();
+        avaliacao1.setData(Date.valueOf("2025-01-31"));
+        avaliacao1.setDescricao("Avaliação 1");
+        avaliacao1.setNotaMaxima(30.0);
+        avaliacao1.setTurma(turma1);
+        AvaliacaoDTO avaliacao1DTO = avaliacaoService.insert(new AvaliacaoDTO(avaliacao1));
+
+        Avaliacao avaliacao2 = new Avaliacao();
+        avaliacao2.setData(Date.valueOf("2025-03-10"));
+        avaliacao2.setDescricao("Avaliação 2");
+        avaliacao2.setNotaMaxima(35.0);
+        avaliacao2.setTurma(turma1);
+        AvaliacaoDTO avaliacao2DTO = avaliacaoService.insert(new AvaliacaoDTO(avaliacao2));
+
+        Avaliacao avaliacao3 = new Avaliacao();
+        avaliacao3.setData(Date.valueOf("2025-02-12"));
+        avaliacao3.setDescricao("Avaliação 1");
+        avaliacao3.setNotaMaxima(40.0);
+        avaliacao3.setTurma(turma2);
+        AvaliacaoDTO avaliacao3DTO = avaliacaoService.insert(new AvaliacaoDTO(avaliacao3));
+
+        Avaliacao avaliacao4 = new Avaliacao();
+        avaliacao4.setData(Date.valueOf("2025-02-20"));
+        avaliacao4.setDescricao("Prova de Química");
+        avaliacao4.setNotaMaxima(50.0);
+        avaliacao4.setTurma(turma3);
+        AvaliacaoDTO avaliacao4DTO = avaliacaoService.insert(new AvaliacaoDTO(avaliacao4));
+
+        Avaliacao avaliacao5 = new Avaliacao();
+        avaliacao5.setData(Date.valueOf("2025-03-01"));
+        avaliacao5.setDescricao("Teste de Física");
+        avaliacao5.setNotaMaxima(30.0);
+        avaliacao5.setTurma(turma4);
+        AvaliacaoDTO avaliacao5DTO = avaliacaoService.insert(new AvaliacaoDTO(avaliacao5));
+
+        // Alterar notas
+        List<Nota> notas = notaRepository.findByAvaliacaoId(avaliacao1DTO.getId());
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        System.out.println(notas);
+        for (Nota nota : notas) {
+            nota.setNota(Double.valueOf(random.nextInt(7) * 5));
+            notaRepository.save(nota);
+        }
+        notas = notaRepository.findByAvaliacaoId(avaliacao2DTO.getId());
+        for (Nota nota : notas) {
+            nota.setNota(Double.valueOf(random.nextInt(8) * 5));
+            notaRepository.save(nota);
+        }
+        notas = notaRepository.findByAvaliacaoId(avaliacao3DTO.getId());
+        for (Nota nota : notas) {
+            nota.setNota(Double.valueOf(random.nextInt(9) * 5));
+            notaRepository.save(nota);
+        }
+        notas = notaRepository.findByAvaliacaoId(avaliacao4DTO.getId());
+        for (Nota nota : notas) {
+            nota.setNota(Double.valueOf(random.nextInt(10) * 5));
+            notaRepository.save(nota);
+        }
+        notas = notaRepository.findByAvaliacaoId(avaliacao5DTO.getId());
+        for (Nota nota : notas) {
+            nota.setNota(Double.valueOf(random.nextInt(6) * 5));
+            notaRepository.save(nota);
+        }
     }
 }
