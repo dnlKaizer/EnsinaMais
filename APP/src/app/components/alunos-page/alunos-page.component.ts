@@ -32,6 +32,10 @@ export class AlunosPageComponent {
   isLoading: boolean = false;
   errorMessage: string = '';
 
+  // Verificação de tipo de usuário
+  isAdmin: boolean = false;
+  isProfessor: boolean = false;
+
   // Propriedades do modal
   showModal: boolean = false;
   selectedAluno: Aluno | null = null;
@@ -52,7 +56,10 @@ export class AlunosPageComponent {
   // Estado do formulário
   isSubmitting: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    this.isAdmin = this.authService.isAdmin();
+    this.isProfessor = this.authService.isProfessor();
+  }
 
   /**
    * Método executado quando o componente é inicializado

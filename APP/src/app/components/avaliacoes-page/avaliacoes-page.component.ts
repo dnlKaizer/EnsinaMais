@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -36,11 +36,13 @@ enum ModalMode {
   templateUrl: './avaliacoes-page.component.html',
   styleUrl: './avaliacoes-page.component.css',
 })
-export class AvaliacoesPageComponent {
+export class AvaliacoesPageComponent implements OnInit {
   avaliacoes: Avaliacao[] = [];
   turmas: Turma[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
+  turmaIdFiltro: number | null = null; // Para filtrar por turma específica
+  turmaFixa: boolean = false; // Para indicar se a turma está fixa (não pode ser alterada)
 
   // Propriedades do modal
   showModal: boolean = false;
@@ -62,14 +64,36 @@ export class AvaliacoesPageComponent {
   // Estado do formulário
   isSubmitting: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   /**
    * Método executado quando o componente é inicializado
    */
   async ngOnInit() {
+    this.verificarParametroTurma();
     await this.carregar();
     await this.carregarTurmas();
+  }
+
+  /**
+   * Verifica se foi passado um ID de turma como parâmetro na query string
+   */
+  private verificarParametroTurma(): void {
+    this.route.queryParams.subscribe((params) => {
+      if (params['turmaId']) {
+        this.turmaIdFiltro = parseInt(params['turmaId'], 10);
+        this.formData.idTurma = this.turmaIdFiltro; // Pre-selecionar a turma no formulário
+        this.turmaFixa = true; // Turma fixa, não pode ser alterada
+        console.log(
+          'Filtro por turma aplicado nas avaliações:',
+          this.turmaIdFiltro
+        );
+      }
+    });
   }
 
   /**
@@ -96,7 +120,20 @@ export class AvaliacoesPageComponent {
       }
 
       // Converter resposta para JSON
-      this.avaliacoes = await response.json();
+      let avaliacoes = await response.json();
+
+      // Se um filtro de turma foi aplicado, filtrar as avaliações
+      if (this.turmaIdFiltro) {
+        avaliacoes = avaliacoes.filter(
+          (avaliacao: Avaliacao) => avaliacao.idTurma === this.turmaIdFiltro
+        );
+        console.log(
+          `Avaliações filtradas para turma ${this.turmaIdFiltro}:`,
+          avaliacoes
+        );
+      }
+
+      this.avaliacoes = avaliacoes;
 
       console.log('Avaliações carregadas:', this.avaliacoes);
     } catch (error: any) {
@@ -154,7 +191,7 @@ export class AvaliacoesPageComponent {
       data: '',
       descricao: '',
       notaMaxima: 0,
-      idTurma: 0,
+      idTurma: this.turmaIdFiltro || 0, // Manter a turma pré-selecionada se existir
     };
     this.showModal = true;
     this.errorMessage = '';
@@ -222,8 +259,8 @@ export class AvaliacoesPageComponent {
           body: JSON.stringify({
             data: this.formData.data,
             descricao: this.formData.descricao,
-            notaMaxima: this.formData.notaMaxima,
-            idTurma: this.formData.idTurma,
+            notaMaxima: Number(this.formData.notaMaxima),
+            idTurma: Number(this.formData.idTurma),
           }),
         });
       } else {
@@ -238,8 +275,8 @@ export class AvaliacoesPageComponent {
             body: JSON.stringify({
               data: this.formData.data,
               descricao: this.formData.descricao,
-              notaMaxima: this.formData.notaMaxima,
-              idTurma: this.formData.idTurma,
+              notaMaxima: Number(this.formData.notaMaxima),
+              idTurma: Number(this.formData.idTurma),
             }),
           }
         );
@@ -284,7 +321,7 @@ export class AvaliacoesPageComponent {
       return false;
     }
 
-    if (!this.formData.idTurma || this.formData.idTurma <= 0) {
+    if (!this.formData.idTurma || Number(this.formData.idTurma) <= 0) {
       this.errorMessage = 'A turma é obrigatória';
       return false;
     }
