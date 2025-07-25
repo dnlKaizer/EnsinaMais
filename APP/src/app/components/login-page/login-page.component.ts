@@ -27,16 +27,6 @@ export class LoginPageComponent {
     this.inicializarPagina();
   }
 
-  private navegar() {
-    if (this.authService.isAdmin()) {
-      this.router.navigate(['/home']);
-    } else if (this.authService.isProfessor()) {
-      this.router.navigate(['/professor']);
-    } else if (this.authService.isAluno()) {
-      this.router.navigate(['/aluno']);
-    }
-  }
-
   // Função que executa antes da página carregar
   private inicializarPagina() {
     // Verificar se usuário já está logado

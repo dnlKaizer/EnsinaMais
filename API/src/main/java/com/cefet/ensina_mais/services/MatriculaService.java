@@ -23,7 +23,7 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class MatriculaService {
 
-    static Long nMatriculas = 100l;
+    static Long nMatriculas = 10l;
     
     @Autowired
     private MatriculaRepository matriculaRepository;

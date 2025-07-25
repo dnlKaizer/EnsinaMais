@@ -22,17 +22,6 @@ public class AlunoDTO {
         this.idUsuario = p.getUsuario().getId();
     }
 
-    public AlunoDTO(Aluno p, boolean includeUsuario) {
-        this.id = p.getId();
-        this.nome = p.getNome();
-        this.cpf = p.getCpf();
-        this.email = p.getEmail();
-        this.dataNascimento = p.getDataNascimento();
-        if (includeUsuario) {
-            this.idUsuario = p.getUsuario().getId();
-        }
-    }
-
     public AlunoDTO() {
     }
 

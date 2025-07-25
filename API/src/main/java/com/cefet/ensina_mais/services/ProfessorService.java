@@ -76,12 +76,6 @@ public class ProfessorService {
         return new ProfessorDTO(professor);
     }
 
-    public Professor findProfessorById(Long id) {
-        Professor professor = professorRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado com ID: " + id));
-        return professor;
-    }
-
     public ProfessorDTO findByUsuarioId(Long usuarioId) {
         Professor professor = professorRepository.findByUsuarioId(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado com ID de usuário: " + usuarioId));
@@ -106,12 +100,9 @@ public class ProfessorService {
         if (professorRepository.existsByCpf(professorDTO.getCpf()))
             throw new IllegalArgumentException("Já existe um professor com o CPF: " + professorDTO.getCpf());
 
-        // Extrair primeiro nome em lowercase para login e senha
-        String primeiroNome = professorDTO.getNome().split(" ")[0].toLowerCase();
-
         Usuario usuario = new Usuario();
-        usuario.setLogin(primeiroNome);
-        usuario.setSenha(passwordEncoder.encode(primeiroNome));
+        usuario.setLogin(professorDTO.getNome());
+        usuario.setSenha(passwordEncoder.encode(professorDTO.getNome()));
         usuario.setNivelAcesso(NivelAcesso.PROFESSOR);
         usuario = usuarioRepository.save(usuario);
 
@@ -120,7 +111,6 @@ public class ProfessorService {
         professor.setCpf(professorDTO.getCpf());
         professor.setEmail(professorDTO.getEmail());
         professor.setTitulacao(professorDTO.getTitulacao());
-        professor.setUsuario(usuario);
         professor = professorRepository.save(professor);
         return new ProfessorDTO(professor);
     }

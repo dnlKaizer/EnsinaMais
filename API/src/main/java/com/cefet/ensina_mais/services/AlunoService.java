@@ -9,25 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cefet.ensina_mais.dto.AlunoDTO;
-import com.cefet.ensina_mais.dto.AvaliacaoDTO;
-import com.cefet.ensina_mais.dto.DisciplinaDTO;
 import com.cefet.ensina_mais.dto.MatriculaDTO;
 import com.cefet.ensina_mais.dto.MatriculaTurmaDTO;
 import com.cefet.ensina_mais.dto.NotaDTO;
-import com.cefet.ensina_mais.dto.ProfessorDTO;
-import com.cefet.ensina_mais.dto.TurmaDTO;
 import com.cefet.ensina_mais.entities.Aluno;
-import com.cefet.ensina_mais.entities.Avaliacao;
-import com.cefet.ensina_mais.entities.Disciplina;
 import com.cefet.ensina_mais.entities.Matricula;
 import com.cefet.ensina_mais.entities.MatriculaTurma;
 import com.cefet.ensina_mais.entities.NivelAcesso;
 import com.cefet.ensina_mais.entities.Nota;
-import com.cefet.ensina_mais.entities.Professor;
-import com.cefet.ensina_mais.entities.Turma;
 import com.cefet.ensina_mais.entities.Usuario;
 import com.cefet.ensina_mais.repositories.AlunoRepository;
-import com.cefet.ensina_mais.repositories.AvaliacaoRepository;
 import com.cefet.ensina_mais.repositories.MatriculaRepository;
 import com.cefet.ensina_mais.repositories.MatriculaTurmaRepository;
 import com.cefet.ensina_mais.repositories.NotaRepository;
@@ -50,9 +41,6 @@ public class AlunoService {
     private NotaRepository notaRepository;
 
     @Autowired
-    private AvaliacaoRepository avaliacaoRepository;
-
-    @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Autowired
@@ -71,21 +59,9 @@ public class AlunoService {
         return new AlunoDTO(aluno);
     }
 
-    public Aluno findAlunoById(Long id) {
-        Aluno aluno = alunoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com ID: " + id));
-        return aluno;
-    }
-
     public AlunoDTO findByUsuarioId(Long usuarioId) {
         Aluno aluno = alunoRepository.findByUsuarioId(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com ID de usuário: " + usuarioId));
-        return new AlunoDTO(aluno);
-    }
-
-    public AlunoDTO findByUsuarioLogin(String usuarioLogin) {
-        Aluno aluno = alunoRepository.findByUsuarioLogin(usuarioLogin)
-                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com login de usuário: " + usuarioLogin));
         return new AlunoDTO(aluno);
     }
 
@@ -107,12 +83,9 @@ public class AlunoService {
         if (alunoRepository.existsByCpf(alunoDTO.getCpf()))
             throw new IllegalArgumentException("Já existe um aluno com o CPF: " + alunoDTO.getCpf());
 
-        // Extrair primeiro nome em lowercase para login e senha
-        String primeiroNome = alunoDTO.getNome().split(" ")[0].toLowerCase();
-
         Usuario usuario = new Usuario();
-        usuario.setLogin(primeiroNome);
-        usuario.setSenha(passwordEncoder.encode(primeiroNome));
+        usuario.setLogin(alunoDTO.getNome());
+        usuario.setSenha(passwordEncoder.encode(alunoDTO.getNome()));
         usuario.setNivelAcesso(NivelAcesso.ALUNO);
         usuario = usuarioRepository.save(usuario);
 
@@ -219,60 +192,10 @@ public class AlunoService {
         return matriculaTurmas.stream().map(MatriculaTurmaDTO::new).toList();
     }
 
-    // Buscar uma matrícula-turma específica por ID
-    public MatriculaTurmaDTO findMatriculaTurmaById(Long matriculaTurmaId) {
-        MatriculaTurma matriculaTurma = matriculaTurmaRepository.findById(matriculaTurmaId)
-                .orElseThrow(() -> new EntityNotFoundException("Matrícula-Turma não encontrada com ID: " + matriculaTurmaId));
-        return new MatriculaTurmaDTO(matriculaTurma);
-    }
-
     // Buscar notas de uma matrícula-turma específica
     public List<NotaDTO> findNotasByMatriculaTurmaId(Long matriculaTurmaId) {
         List<Nota> notas = notaRepository.findByMatriculaTurmaId(matriculaTurmaId);
         return notas.stream().map(NotaDTO::new).toList();
-    }
-
-    // Buscar disciplina por matrícula-turma ID
-    public DisciplinaDTO findDisciplinaByMatriculaTurmaId(Long matriculaTurmaId) {
-        MatriculaTurma matriculaTurma = matriculaTurmaRepository.findById(matriculaTurmaId)
-            .orElseThrow(() -> new EntityNotFoundException("Matrícula-turma não encontrada com ID: " + matriculaTurmaId));
-        
-        Turma turma = matriculaTurma.getTurma();
-        Disciplina disciplina = turma.getDisciplina();
-        
-        return new DisciplinaDTO(disciplina);
-    }
-
-    // Buscar professor por matrícula-turma ID
-    public ProfessorDTO findProfessorByMatriculaTurmaId(Long matriculaTurmaId) {
-        MatriculaTurma matriculaTurma = matriculaTurmaRepository.findById(matriculaTurmaId)
-            .orElseThrow(() -> new EntityNotFoundException("Matrícula-turma não encontrada com ID: " + matriculaTurmaId));
-        
-        Turma turma = matriculaTurma.getTurma();
-        Professor professor = turma.getProfessor();
-        
-        return new ProfessorDTO(professor);
-    }
-
-    // Buscar avaliações por matrícula-turma ID
-    public List<AvaliacaoDTO> findAvaliacoesByMatriculaTurmaId(Long matriculaTurmaId) {
-        MatriculaTurma matriculaTurma = matriculaTurmaRepository.findById(matriculaTurmaId)
-            .orElseThrow(() -> new EntityNotFoundException("Matrícula-turma não encontrada com ID: " + matriculaTurmaId));
-        
-        Turma turma = matriculaTurma.getTurma();
-        List<Avaliacao> avaliacoes = avaliacaoRepository.findByTurmaId(turma.getId());
-        
-        return avaliacoes.stream().map(AvaliacaoDTO::new).toList();
-    }
-
-    // Buscar turma por matrícula-turma ID
-    public TurmaDTO findTurmaByMatriculaTurmaId(Long matriculaTurmaId) {
-        MatriculaTurma matriculaTurma = matriculaTurmaRepository.findById(matriculaTurmaId)
-            .orElseThrow(() -> new EntityNotFoundException("Matrícula-turma não encontrada com ID: " + matriculaTurmaId));
-        
-        Turma turma = matriculaTurma.getTurma();
-        
-        return new TurmaDTO(turma);
     }
 
 }

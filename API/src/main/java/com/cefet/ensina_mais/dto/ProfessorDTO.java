@@ -23,17 +23,6 @@ public class ProfessorDTO {
         this.idUsuario = p.getUsuario().getId();
     }
 
-    public ProfessorDTO(Professor p, boolean includeUsuario) {
-        this.id = p.getId();
-        this.nome = p.getNome();
-        this.cpf = p.getCpf();
-        this.email = p.getEmail();
-        this.titulacao = p.getTitulacao();
-        if (includeUsuario) {
-            this.idUsuario = p.getUsuario().getId();
-        }
-    }
-
     public Long getId() {
         return id;
     }
