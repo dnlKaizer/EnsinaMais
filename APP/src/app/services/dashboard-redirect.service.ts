@@ -17,7 +17,7 @@ export class DashboardRedirectService {
     } else if (this.authService.isProfessor()) {
       this.router.navigate(['/professor-dashboard']);
     } else if (this.authService.isAluno()) {
-      this.router.navigate(['/aluno-dashboard']);
+      this.router.navigate(['/aluno']);
     } else {
       // Fallback para login se não conseguir identificar o tipo
       this.router.navigate(['/login']);
