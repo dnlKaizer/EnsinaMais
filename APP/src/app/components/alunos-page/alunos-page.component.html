@@ -31,8 +31,8 @@
 </header>
 
 <div class="container py-4 d-flex justify-content-between w-100">
-  <h2>Gerenciar Alunos</h2>
-  <div class="d-flex gap-2">
+  <h2>{{ isProfessor ? "Meus Alunos" : "Gerenciar Alunos" }}</h2>
+  <div class="d-flex gap-2" *ngIf="isAdmin">
     <button class="btn btn-primary" (click)="inserir()">Adicionar Aluno</button>
   </div>
 </div>
@@ -142,6 +142,7 @@
           class="btn-clear p-2 me-3"
           (click)="excluir(aluno.id)"
           title="Excluir aluno"
+          *ngIf="isAdmin"
         >
           <img
             class=""
@@ -155,6 +156,7 @@
           class="btn-clear p-2"
           (click)="editar(aluno.id)"
           title="Editar aluno"
+          *ngIf="isAdmin"
         >
           <img
             class=""
@@ -311,6 +313,7 @@
             type="button"
             class="btn btn-outline-primary"
             (click)="abrirModalEdicao(selectedAluno!)"
+            *ngIf="isAdmin"
           >
             <i class="fas fa-edit me-1"></i>
             Editar Aluno
@@ -319,6 +322,7 @@
             type="button"
             class="btn btn-outline-danger"
             (click)="excluir(selectedAluno!.id)"
+            *ngIf="isAdmin"
           >
             <i class="fas fa-trash me-1"></i>
             Excluir Aluno
