@@ -12,6 +12,22 @@ interface Nota {
   idMatriculaTurma: number;
 }
 
+// Interface para Avaliação
+interface Avaliacao {
+  id: number;
+  descricao: string;
+  notaMaxima: number;
+  data: string;
+}
+
+// Interface para Aluno (para o select)
+interface AlunoMatriculado {
+  idMatriculaTurma: number;
+  idAluno: number;
+  nomeAluno: string;
+  cpfAluno: string;
+}
+
 // Enum para os modos do modal
 enum ModalMode {
   VIEW = 'view',
@@ -31,6 +47,10 @@ export class NotasPageComponent implements OnInit {
   isLoading: boolean = false;
   errorMessage: string = '';
   turmaIdFiltro: number | null = null; // Para filtrar por turma específica
+
+  // Listas para os selects
+  avaliacoesDaTurma: Avaliacao[] = [];
+  alunosMatriculados: AlunoMatriculado[] = [];
 
   // Propriedades do modal
   showModal: boolean = false;
@@ -63,6 +83,18 @@ export class NotasPageComponent implements OnInit {
   async ngOnInit() {
     this.verificarParametroTurma();
     await this.carregar();
+
+    // Carregar dados para os selects apenas se houver filtro de turma
+    if (this.turmaIdFiltro) {
+      console.log('Carregando dados para turma:', this.turmaIdFiltro);
+      await this.carregarAvaliacoesDaTurma();
+      await this.carregarAlunosMatriculados();
+    } else {
+      console.log(
+        'Nenhum filtro de turma aplicado - carregando todas as avaliações'
+      );
+      await this.carregarAvaliacoesDaTurma();
+    }
   }
 
   /**
@@ -81,7 +113,7 @@ export class NotasPageComponent implements OnInit {
    * Adiciona uma novo nota
    */
   async inserir() {
-    this.abrirModalCriacao();
+    await this.abrirModalCriacao();
   }
 
   /**
@@ -141,11 +173,151 @@ export class NotasPageComponent implements OnInit {
       this.isLoading = false;
     }
   }
+
+  /**
+   * Carrega as avaliações da turma específica
+   */
+  async carregarAvaliacoesDaTurma(): Promise<void> {
+    try {
+      const response = await this.authService.authenticatedFetch('/avaliacoes');
+      if (response.ok) {
+        const avaliacoes = await response.json();
+        if (this.turmaIdFiltro) {
+          this.avaliacoesDaTurma = avaliacoes.filter(
+            (avaliacao: any) => avaliacao.idTurma === this.turmaIdFiltro
+          );
+        } else {
+          // Se não houver filtro, usar todas as avaliações
+          this.avaliacoesDaTurma = avaliacoes;
+        }
+        console.log('Avaliações carregadas:', this.avaliacoesDaTurma);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar avaliações:', error);
+    }
+  }
+
+  /**
+   * Carrega os alunos matriculados na turma específica
+   */
+  async carregarAlunosMatriculados(): Promise<void> {
+    try {
+      console.log(
+        'Carregando alunos matriculados para turma:',
+        this.turmaIdFiltro
+      );
+
+      if (!this.turmaIdFiltro) {
+        console.log('Nenhuma turma selecionada, não carregando alunos');
+        this.alunosMatriculados = [];
+        return;
+      }
+
+      // Buscar matrículas da turma (relação matrícula-turma)
+      const matriculasTurmaResponse = await this.authService.authenticatedFetch(
+        '/matriculas-turmas'
+      );
+      if (!matriculasTurmaResponse.ok) {
+        throw new Error('Erro ao carregar matrículas da turma');
+      }
+      const matriculasTurma = await matriculasTurmaResponse.json();
+      console.log('Todas as matriculas-turmas:', matriculasTurma);
+
+      // Filtrar matrículas desta turma específica
+      const matriculasDestaTurma = matriculasTurma.filter(
+        (mt: any) => mt.idTurma === this.turmaIdFiltro
+      );
+      console.log('Matrículas da turma filtrada:', matriculasDestaTurma);
+
+      if (matriculasDestaTurma.length === 0) {
+        console.log('Nenhuma matrícula encontrada para esta turma');
+        this.alunosMatriculados = [];
+        return;
+      }
+
+      // Buscar todas as matrículas para mapear ID da matrícula para ID do aluno
+      const matriculasResponse = await this.authService.authenticatedFetch(
+        '/matriculas'
+      );
+      if (!matriculasResponse.ok) {
+        throw new Error('Erro ao carregar matrículas');
+      }
+      const matriculas = await matriculasResponse.json();
+      console.log('Todas as matrículas:', matriculas);
+
+      // Buscar todos os alunos
+      const alunosResponse = await this.authService.authenticatedFetch(
+        '/alunos'
+      );
+      if (!alunosResponse.ok) {
+        throw new Error('Erro ao carregar alunos');
+      }
+      const todosAlunos = await alunosResponse.json();
+      console.log('Todos os alunos:', todosAlunos);
+
+      // Mapear IDs das matrículas para IDs dos alunos
+      const idsMatriculasDestaTurma = matriculasDestaTurma.map(
+        (mt: any) => mt.idMatricula
+      );
+      console.log('IDs das matrículas desta turma:', idsMatriculasDestaTurma);
+
+      const matriculasComAlunos = matriculas.filter((m: any) =>
+        idsMatriculasDestaTurma.includes(m.id)
+      );
+      console.log('Matrículas com alunos desta turma:', matriculasComAlunos);
+
+      // Criar lista de alunos matriculados com informações necessárias
+      this.alunosMatriculados = matriculasComAlunos.map((matricula: any) => {
+        const aluno = todosAlunos.find((a: any) => a.id === matricula.idAluno);
+        const matriculaTurma = matriculasDestaTurma.find(
+          (mt: any) => mt.idMatricula === matricula.id
+        );
+
+        console.log(
+          `Matrícula ${matricula.id} - Aluno:`,
+          aluno,
+          'MatriculaTurma:',
+          matriculaTurma
+        );
+
+        return {
+          idMatriculaTurma: matriculaTurma ? matriculaTurma.id : 0,
+          idAluno: matricula.idAluno,
+          nomeAluno: aluno ? aluno.nome : 'Nome não encontrado',
+          cpfAluno: aluno ? aluno.cpf : 'CPF não encontrado',
+        };
+      });
+
+      console.log('Alunos matriculados carregados:', this.alunosMatriculados);
+    } catch (error) {
+      console.error('Erro ao carregar alunos matriculados:', error);
+      this.alunosMatriculados = [];
+    }
+  }
+
   /**
    * Recarrega a lista de notas
    */
   async recarregar(): Promise<void> {
     await this.carregar();
+  }
+
+  /**
+   * Obtém o nome da avaliação pelo ID
+   */
+  getAvaliacaoNome(idAvaliacao: number): string {
+    const avaliacao = this.avaliacoesDaTurma.find((a) => a.id === idAvaliacao);
+    return avaliacao ? avaliacao.descricao : `Avaliação #${idAvaliacao}`;
+  }
+
+  /**
+   * Obtém o nome do aluno pelo ID da matrícula-turma
+   */
+  getAlunoNome(idMatriculaTurma: number): string {
+    const aluno = this.alunosMatriculados.find(
+      (a) => a.idMatriculaTurma === idMatriculaTurma
+    );
+    return aluno ? aluno.nomeAluno : `Matrícula #${idMatriculaTurma}`;
   }
 
   /**
@@ -180,10 +352,10 @@ export class NotasPageComponent implements OnInit {
   /**
    * Edita uma nota
    */
-  editar(notaId: number): void {
+  async editar(notaId: number): Promise<void> {
     const nota = this.notas.find((n) => n.id === notaId);
     if (nota) {
-      this.abrirModalEdicao(nota);
+      await this.abrirModalEdicao(nota);
     }
   }
 
@@ -211,7 +383,7 @@ export class NotasPageComponent implements OnInit {
   /**
    * Abre o modal para criação de nova nota
    */
-  abrirModalCriacao(): void {
+  async abrirModalCriacao(): Promise<void> {
     this.selectedNota = null;
     this.modalMode = ModalMode.CREATE;
     this.formData = {
@@ -220,16 +392,38 @@ export class NotasPageComponent implements OnInit {
       idAvaliacao: 0,
       idMatriculaTurma: 0,
     };
+
+    // Carregar dados para os selects se ainda não foram carregados
+    if (this.turmaIdFiltro) {
+      if (this.avaliacoesDaTurma.length === 0) {
+        await this.carregarAvaliacoesDaTurma();
+      }
+      if (this.alunosMatriculados.length === 0) {
+        await this.carregarAlunosMatriculados();
+      }
+    }
+
     this.showModal = true;
   }
 
   /**
    * Abre o modal para edição de nota
    */
-  abrirModalEdicao(nota: Nota): void {
+  async abrirModalEdicao(nota: Nota): Promise<void> {
     this.selectedNota = nota;
     this.modalMode = ModalMode.EDIT;
     this.formData = { ...nota }; // Cópia dos dados para edição
+
+    // Carregar dados para os selects se ainda não foram carregados
+    if (this.turmaIdFiltro) {
+      if (this.avaliacoesDaTurma.length === 0) {
+        await this.carregarAvaliacoesDaTurma();
+      }
+      if (this.alunosMatriculados.length === 0) {
+        await this.carregarAlunosMatriculados();
+      }
+    }
+
     this.showModal = true;
   }
 
@@ -256,6 +450,10 @@ export class NotasPageComponent implements OnInit {
     this.errorMessage = '';
 
     try {
+      // Log dados do formulário para debug
+      console.log('Dados do formulário antes de salvar:', this.formData);
+      console.log('Modo do modal:', this.modalMode);
+
       if (this.modalMode === ModalMode.CREATE) {
         await this.create();
       } else if (this.modalMode === ModalMode.EDIT) {
@@ -276,28 +474,83 @@ export class NotasPageComponent implements OnInit {
    * Cria uma nova nota
    */
   private async create(): Promise<void> {
+    // Verificar se é professor e obter ID
+    console.log('Verificando usuário logado...');
+    console.log('É professor:', this.authService.isProfessor());
+    console.log('É admin:', this.authService.isAdmin());
+
+    const dados = {
+      nota: Number(this.formData.nota), // Converter para número
+      idAvaliacao: Number(this.formData.idAvaliacao), // Converter para Long
+      idMatriculaTurma: Number(this.formData.idMatriculaTurma), // Converter para Long
+    };
+
+    console.log('Dados sendo enviados para criar nota:', dados);
+    console.log('Tipos dos dados:', {
+      nota: typeof dados.nota,
+      idAvaliacao: typeof dados.idAvaliacao,
+      idMatriculaTurma: typeof dados.idMatriculaTurma,
+    });
+
+    // Verificar se todos os valores são válidos
+    if (dados.nota <= 0 || isNaN(dados.nota)) {
+      throw new Error('Nota deve ser um número válido maior que 0');
+    }
+    if (dados.idAvaliacao <= 0 || isNaN(dados.idAvaliacao)) {
+      throw new Error('ID da avaliação deve ser um número válido');
+    }
+    if (dados.idMatriculaTurma <= 0 || isNaN(dados.idMatriculaTurma)) {
+      throw new Error('ID da matrícula-turma deve ser um número válido');
+    }
+
     const response = await this.authService.authenticatedFetch('/notas', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        nota: this.formData.nota,
-        idAvaliacao: this.formData.idAvaliacao,
-        idMatriculaTurma: this.formData.idMatriculaTurma,
-      }),
+      body: JSON.stringify(dados),
     });
 
+    console.log(
+      'Resposta da criação de nota:',
+      response.status,
+      response.statusText
+    );
+
     if (!response.ok) {
-      const errorData = await response.text();
+      let errorData;
+      try {
+        errorData = await response.text();
+        console.log('Erro detalhado:', errorData);
+      } catch (e) {
+        errorData = 'Erro desconhecido';
+      }
+
+      // Se o erro for 403, mostrar mensagem específica
+      if (response.status === 403) {
+        throw new Error(
+          'Sem permissão para criar notas. Apenas administradores podem criar notas diretamente. Contate o administrador do sistema.'
+        );
+      }
+
       throw new Error(errorData || 'Erro ao criar nota');
     }
+
+    console.log('Nota criada com sucesso');
   }
 
   /**
    * Atualiza uma nota existente
    */
   private async atualizar(): Promise<void> {
+    const dados = {
+      nota: Number(this.formData.nota), // Converter para número
+      idAvaliacao: Number(this.formData.idAvaliacao), // Converter para Long
+      idMatriculaTurma: Number(this.formData.idMatriculaTurma), // Converter para Long
+    };
+
+    console.log('Dados sendo enviados para atualizar nota:', dados);
+
     const response = await this.authService.authenticatedFetch(
       `/notas/${this.formData.id}`,
       {
@@ -305,18 +558,22 @@ export class NotasPageComponent implements OnInit {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          nota: this.formData.nota,
-          idAvaliacao: this.formData.idAvaliacao,
-          idMatriculaTurma: this.formData.idMatriculaTurma,
-        }),
+        body: JSON.stringify(dados),
       }
     );
 
     if (!response.ok) {
-      const errorData = await response.text();
+      let errorData;
+      try {
+        errorData = await response.text();
+        console.log('Erro detalhado na atualização:', errorData);
+      } catch (e) {
+        errorData = 'Erro desconhecido';
+      }
       throw new Error(errorData || 'Erro ao atualizar nota');
     }
+
+    console.log('Nota atualizada com sucesso');
   }
 
   /**
